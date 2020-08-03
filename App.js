@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity,TouchableNativeFeedback, SafeAreaView, Platform } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -13,7 +13,12 @@ import OtherScreen from './src/screens/Other';
 
 import { Ionicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import { TouchableWithoutFeedback, TouchableHighlight } from 'react-native-gesture-handler';
 
+function TouchFeedback(props){
+  var C = Platform.OS == 'android' ? TouchableNativeFeedback : TouchableOpacity;
+  return (<C {...props} />);
+}
 
 export default function App() {
   return (
@@ -40,9 +45,13 @@ function MyTabBar({ state, descriptors, navigation }) {
     <View
       style={{
         flexDirection: 'row',
-        borderTopColor: "#d1d1d1",
-        borderTopWidth: 1,
-        paddingVertical: 5
+        shadowOffset: { width: 0, height: 0 },
+        shadowColor: '#000',
+        shadowOpacity: 0.6,
+        shadowRadius: 2,
+        elevation: 10,
+        // background color must be set
+        backgroundColor : "#fff" // invisible color
       }}
     >
       {state.routes.map((route, index) => {
@@ -83,7 +92,7 @@ function MyTabBar({ state, descriptors, navigation }) {
         var iconSize = 25;
 
         return (
-          <TouchableOpacity
+          <TouchFeedback
             accessibilityRole="button"
             accessibilityStates={isFocused ? ['selected'] : []}
             accessibilityLabel={options.tabBarAccessibilityLabel}
@@ -91,12 +100,14 @@ function MyTabBar({ state, descriptors, navigation }) {
             onPress={onPress}
             onLongPress={onLongPress}
             style={{ flex: 1 }}
+            key={route.key}
           >
             <View
               style={{
                 flex:1,
                 justifyContent: "center",
-                alignItems:"center"
+                alignItems:"center",
+                paddingVertical: 5
               }}
             >
               <Feather name={iconName} size={iconSize} color={color} />
@@ -105,7 +116,7 @@ function MyTabBar({ state, descriptors, navigation }) {
                 {label}
               </Text>
             </View>
-          </TouchableOpacity>
+          </TouchFeedback>
         );
       })}
     </View>
