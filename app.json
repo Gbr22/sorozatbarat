@@ -1,0 +1,12 @@
+{
+  "name": "sorozatbarat",
+  "displayName": "sorozatbarat",
+  "expo": {
+    "name": "sorozatbarat",
+    "slug": "sorozatbarat",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
