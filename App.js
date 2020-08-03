@@ -45,11 +45,16 @@ function MyTabBar({ state, descriptors, navigation }) {
     <View
       style={{
         flexDirection: 'row',
-        shadowOffset: { width: 0, height: 0 },
-        shadowColor: '#000',
-        shadowOpacity: 0.6,
-        shadowRadius: 2,
-        elevation: 10,
+        shadowColor: "#000",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        
+        elevation: 5,
         // background color must be set
         backgroundColor : "#fff" // invisible color
       }}
