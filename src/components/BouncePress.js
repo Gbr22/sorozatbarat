@@ -8,7 +8,7 @@ export default class TouchableButton extends React.Component {
         super(props);
         this.children = props.children;
         this.state = {
-            pressed: false
+            pressed: false,
         };
     }
     
@@ -19,17 +19,7 @@ export default class TouchableButton extends React.Component {
         }
         return (
             <TouchableWithoutFeedback
-                onPress={() => {
-                    // Alert.alert(
-                    //     `You clicked this button`,
-                    //     'Hello World！',
-                    //     [
-                    //         {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-                    //         {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                    //         {text: 'OK', onPress: () => console.log('OK Pressed')},
-                    //     ]
-                    // )
-                }}
+                onPress={this.props.onPress}
                 style={s}
                 onPressOut={() => {
                     this.setState({ pressed: false });

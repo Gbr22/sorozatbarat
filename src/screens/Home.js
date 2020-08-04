@@ -6,11 +6,29 @@ import styles, { otherStyles } from '../styles';
 import { FlatList, ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
 import TouchFeedback from '../components/TouchFeedback';
 import BouncePress from '../components/BouncePress';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 
-export default function HomeScreen() {
+const HomeStack = createStackNavigator();
+
+export default function HomeScreen(props){
+    return (
+        <HomeStack.Navigator initialRouteName="Home">
+            <HomeStack.Screen name="Home" component={Home} options={{ title:"Kezdőlap" }}/>
+            <HomeStack.Screen name="Details" component={Details} options={{ title:"Sorozat" }} />
+        </HomeStack.Navigator>
+    );
+}
+function Details(props){
+    var series = props.route.params.series;
+    return (
+        <View><Text>{series.title}</Text></View>
+    )
+}
+
+function Home(props) {
     var data = getHomePageData();
-
 
 
     return (
@@ -25,7 +43,13 @@ export default function HomeScreen() {
                 var cardPadding = 8;
                 return (
                     <Fragment>
-                        <BouncePress>
+                        <BouncePress
+                            onPress={()=>{
+                                props.navigation.navigate("Details", {
+                                    series: item,
+                                });
+                            }}
+                        >
                             <View
                                 style={{
                                     /* backgroundColor: "#EEE", */
