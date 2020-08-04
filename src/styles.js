@@ -7,10 +7,10 @@ var styles = StyleSheet.create({
       backgroundColor: '#fff',
     },
     screenScroll: {
-      paddingTop: StatusBar.currentHeight + 10,
+      /* paddingTop: StatusBar.currentHeight + 10, */
     },
     screenScrollBottom: {
-      height: (StatusBar.currentHeight + 10) + 10,
+      height: /* (StatusBar.currentHeight + 10) +  */10,
     },
     h1: {
         fontSize: 25,
