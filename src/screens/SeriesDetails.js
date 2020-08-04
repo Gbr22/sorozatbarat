@@ -114,18 +114,24 @@ export default function SeriesDetailsScreen(props){
                                     </Text>
                                     )
                                 });
-                                arr = arr.reduce((arr, b) => [...arr, b, (
-                                    <View
-                                        style={{
-                                            width: 1,
-                                            height: 12,
-                                            flex:0,
-                                            backgroundColor: "#0005",
-                                            marginHorizontal: 5,
-                                        }}
-                                    >
-                                    </View>
-                                )], []);
+                                arr = arr.reduce((arr, b) => [...arr, b, "|"], []).map((e,i)=>{
+                                    if (e == "|"){
+                                        return (
+                                            <View
+                                                key={i}
+                                                style={{
+                                                    width: 1,
+                                                    height: 12,
+                                                    flex:0,
+                                                    backgroundColor: "#0005",
+                                                    marginHorizontal: 5,
+                                                }}
+                                            >
+                                            </View>
+                                        )
+                                    }
+                                    return e;
+                                });
                                 arr.pop();
                                 return arr;
                             })()

@@ -1,5 +1,22 @@
 
-export function getHomePageData(){
+import {UA, Login} from '../secret.json';
+
+
+var data = {
+    homepage:null,
+}
+
+export async function getHomePageData(){
+    if (!data.homepage){
+        return fetchHomePageData().then((d)=>{
+            data.homepage = d;
+            return d;
+        })
+    } else {
+        return data.homepage;
+    }
+}
+export async function fetchHomePageData(){
     var d = [
         {
             image:"https://static.sorozatbarat.online/covers/2195.jpg",
@@ -26,7 +43,7 @@ export function getHomePageData(){
             title:"Westworld++"
         },
     ]
-    return [
+    var result = [
         {
             title:"Legfrissebb sorozataink",
             data:d,
@@ -36,4 +53,9 @@ export function getHomePageData(){
             data:d,
         }
     ];
+    return new Promise((r)=>{
+        setTimeout(()=>{
+            r(result);
+        },100);
+    })
 }
