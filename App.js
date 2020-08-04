@@ -15,10 +15,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { TouchableWithoutFeedback, TouchableHighlight } from 'react-native-gesture-handler';
 
-function TouchFeedback(props){
-  var C = Platform.OS == 'android' ? TouchableNativeFeedback : TouchableOpacity;
-  return (<C {...props} />);
-}
+import TouchFeedback from './src/components/TouchFeedback';
+
 
 export default function App() {
   return (
