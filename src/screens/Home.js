@@ -2,8 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import React, { Fragment } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { getHomePageData } from '../logic/homePageData';
-import styles from '../styles';
-import { FlatList } from 'react-native-gesture-handler';
+import styles, { otherStyles } from '../styles';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import TouchFeedback from '../components/TouchFeedback';
 
 
@@ -14,28 +14,31 @@ export default function HomeScreen() {
 
     return (
       <View style={styles.screenCont}>
+        <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#0006" translucent = {true}/>
+        <ScrollView style={styles.screenScroll}>
         {data.map(category=>{
-
             function renderItem({item}){
                 var imageRatio = 136/200;
-                var imgheight = 150;
-                var bottomHeight = 50;
-                var allHeight = 300;
-                var allWidth = 100;
+                var imgHeight = 300 - 110;
+                var imgWidth = imgHeight * imageRatio;
+                var cardPadding = 8;
                 return (
                     <Fragment>
                         <View
                             style={{
-                                backgroundColor: "red",
+                                /* backgroundColor: "#EEE", */
                                 flex: 1,
-                                width: 150,
+                                width: imgWidth + 2*cardPadding,
                                 marginHorizontal: 5,
+                                padding: cardPadding,
+                                borderRadius: 8,
+                                alignItems: "center"
                             }}
                         >
                             <View
                                 style={{
-                                    backgroundColor: "yellow",
-                                    height: imgheight
+                                    height: imgHeight,
+                                    width: imgWidth,
                                 }}
                             >
                                 <Image source={{uri:item.image}} 
@@ -48,7 +51,7 @@ export default function HomeScreen() {
                             </View>
                             <View
                                 style={{
-                                    backgroundColor: "blue",
+                                    
                                     flex: 1,
                                     justifyContent: "center",
                                     alignItems: "center"
@@ -67,16 +70,24 @@ export default function HomeScreen() {
                 <Fragment key={category.title}>
                     <View
                         style={{
-                            height: 250,
+                            height: 300,
                         }}
                     >
-                        <Text style={styles.h1}>{category.title}</Text>
+                        <Text
+                            style={[
+                                styles.h1,
+                                {
+                                    paddingHorizontal: otherStyles.screenPaddingHorizontal
+                                }
+                            ]}
+                        >{category.title}</Text>
                         <FlatList
                             data={category.data}
                             renderItem={renderItem}
                             keyExtractor={item => item.title}
                             horizontal={true}
                             style={{
+                                /* paddingLeft: otherStyles.screenPaddingHorizontal */
                                 
                             }}
                         >
@@ -84,8 +95,10 @@ export default function HomeScreen() {
                     </View>
                 </Fragment>
             );
-        })}
-        <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#0006" translucent = {true}/>
+            })}
+            <View style={styles.screenScrollBottom}></View>
+        </ScrollView>
+        
       </View>
     );
 }
