@@ -12,6 +12,16 @@ var styles = StyleSheet.create({
     screenScrollBottom: {
       height: /* (StatusBar.currentHeight + 10) +  */10,
     },
+    text: {
+      color: "#000D",
+    },
+    textNormal:{
+      color: "#0009",
+      fontSize: 15
+    },
+    textSmall: {
+      color: "#0009"
+    },
     h1: {
         fontSize: 25,
         fontWeight: "bold",

@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     },
     buttonPressed: {
         transform: [{
-            scale: 0.93
+            scale: 0.97
         }],
     }
 });

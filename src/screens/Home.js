@@ -21,9 +21,126 @@ export default function HomeScreen(props){
     );
 }
 function Details(props){
-    var series = props.route.params.series;
+    var description = "Az 1973-as Feltámad a vadnyugat című film alapján készült sorozat a jövőbe kalauzolja el a nézőt. Helyszíne egy kalandpark, ahol szép kis summáért vakációzhat a lakosság tehetősebb része. A parkban robotok teszik élvezetessé és emlékezetessé a vakációzást, s a látogató elutazhat az egyes történelmi korokba: vadnyugatra, az ókori Rómába vagy éppen a lovagi játékokon párbajozhat. Azonban egy nap az egyik android öntudatra ébred és fellázad...";
+    var tags = ["Amerikai", "Dráma", "Kaland", "Sci-Fi", "Thriller", "Western"];
+    var item = props.route.params.series;
+    var imageRatio = 136/200;
+    var imgHeight = 280 - 110;
+    var imgWidth = imgHeight * imageRatio;
     return (
-        <View><Text>{series.title}</Text></View>
+        <View
+            style={{
+                backgroundColor: "white",
+                flex:1
+            }}
+        >
+            <View
+                style={{
+                    flex:0,
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    flexDirection: "row",
+                    padding: 20
+                }}
+            >
+                <View
+                    style={{
+                        height: imgHeight,
+                        width: imgWidth,
+                    }}
+                >
+                    <Image source={{uri:item.image}} 
+                        style={{
+                            flex: 1,
+                            borderRadius: 4
+                        }}
+                        resizeMode="contain"
+                    />
+                </View>
+                <View
+                    style={{
+                        flex: 1,
+                        justifyContent: "center",
+                        alignItems: "flex-start",
+                        paddingLeft: 20,
+                    }}
+                >
+                    <Text
+                        style={[
+                            styles.text,
+                            {
+                                fontSize: 25,
+                                fontWeight: "bold"
+                            }
+                        ]}
+                    >
+                        {item.title}
+                    </Text>
+                    <Text
+                        style={[
+                            styles.textSmall,
+                            {
+                                fontSize: 18,
+                                
+                            }
+                        ]}
+                    >
+                        {2020}
+                    </Text>
+                </View>
+            </View>
+            <View
+                style={{
+                    paddingHorizontal: 20
+                }}
+            >
+                <View
+                    style={{
+                        marginBottom: 15,
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        flexWrap: "wrap"
+                    }}
+                >
+                    
+                    {
+                        (()=>{
+                            var arr = tags.map(tag=>{
+                                return (
+                                <Text
+                                    key={tag}
+                                    style={[styles.textNormal]}
+                                >
+                                    {tag}
+                                </Text>
+                                )
+                            });
+                            arr = arr.reduce((arr, b) => [...arr, b, (
+                                <View
+                                    style={{
+                                        width: 1,
+                                        height: 12,
+                                        flex:0,
+                                        backgroundColor: "#0005",
+                                        marginHorizontal: 5,
+                                    }}
+                                >
+                                </View>
+                            )], []);
+                            arr.pop();
+                            return arr;
+                        })()
+                    }
+                    
+                </View>
+                <Text
+                    selectable={true}
+                >
+                    { description }
+                </Text>
+            </View>
+        </View>
     )
 }
 
@@ -38,7 +155,7 @@ function Home(props) {
         {data.map(category=>{
             function renderItem({item}){
                 var imageRatio = 136/200;
-                var imgHeight = 300 - 110;
+                var imgHeight = 280 - 110;
                 var imgWidth = imgHeight * imageRatio;
                 var cardPadding = 8;
                 return (
@@ -55,7 +172,7 @@ function Home(props) {
                                     /* backgroundColor: "#EEE", */
                                     flex: 1,
                                     width: imgWidth + 2*cardPadding,
-                                    marginHorizontal: 5,
+                                    marginHorizontal: 3,
                                     padding: cardPadding,
                                     borderRadius: 8,
                                     alignItems: "center"
@@ -70,7 +187,7 @@ function Home(props) {
                                     <Image source={{uri:item.image}} 
                                         style={{
                                             flex: 1,
-                                            borderRadius: 2
+                                            borderRadius: 4
                                         }}
                                         resizeMode="contain"
                                     />
@@ -79,8 +196,9 @@ function Home(props) {
                                     style={{
                                         
                                         flex: 1,
-                                        justifyContent: "center",
-                                        alignItems: "center"
+                                        justifyContent: "flex-start",
+                                        alignItems: "center",
+                                        paddingTop:5,
                                     }}
                                 >
                                     <Text>{item.title}</Text>
@@ -97,7 +215,7 @@ function Home(props) {
                 <Fragment key={category.title}>
                     <View
                         style={{
-                            height: 300,
+                            height: 290,
                         }}
                     >
                         <Text
