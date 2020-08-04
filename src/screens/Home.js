@@ -3,8 +3,9 @@ import React, { Fragment } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { getHomePageData } from '../logic/homePageData';
 import styles, { otherStyles } from '../styles';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { FlatList, ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
 import TouchFeedback from '../components/TouchFeedback';
+import BouncePress from '../components/BouncePress';
 
 
 export default function HomeScreen() {
@@ -24,43 +25,45 @@ export default function HomeScreen() {
                 var cardPadding = 8;
                 return (
                     <Fragment>
-                        <View
-                            style={{
-                                /* backgroundColor: "#EEE", */
-                                flex: 1,
-                                width: imgWidth + 2*cardPadding,
-                                marginHorizontal: 5,
-                                padding: cardPadding,
-                                borderRadius: 8,
-                                alignItems: "center"
-                            }}
-                        >
+                        <BouncePress>
                             <View
                                 style={{
-                                    height: imgHeight,
-                                    width: imgWidth,
-                                }}
-                            >
-                                <Image source={{uri:item.image}} 
-                                    style={{
-                                        flex: 1,
-                                        borderRadius: 2
-                                    }}
-                                    resizeMode="contain"
-                                />
-                            </View>
-                            <View
-                                style={{
-                                    
+                                    /* backgroundColor: "#EEE", */
                                     flex: 1,
-                                    justifyContent: "center",
+                                    width: imgWidth + 2*cardPadding,
+                                    marginHorizontal: 5,
+                                    padding: cardPadding,
+                                    borderRadius: 8,
                                     alignItems: "center"
                                 }}
                             >
-                                <Text>{item.title}</Text>
-                            </View>
+                                <View
+                                    style={{
+                                        height: imgHeight,
+                                        width: imgWidth,
+                                    }}
+                                >
+                                    <Image source={{uri:item.image}} 
+                                        style={{
+                                            flex: 1,
+                                            borderRadius: 2
+                                        }}
+                                        resizeMode="contain"
+                                    />
+                                </View>
+                                <View
+                                    style={{
+                                        
+                                        flex: 1,
+                                        justifyContent: "center",
+                                        alignItems: "center"
+                                    }}
+                                >
+                                    <Text>{item.title}</Text>
+                                </View>
 
-                        </View>
+                            </View>
+                        </BouncePress>
                         
                     </Fragment>
                 );
