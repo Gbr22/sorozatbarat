@@ -31,6 +31,9 @@ var styles = StyleSheet.create({
 });
 export var otherStyles = {
   screenPaddingHorizontal: 10,
+  colors:{
+    theme:'#FFA600',
+  }
 }
 
 export default styles;

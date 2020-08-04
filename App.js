@@ -16,6 +16,7 @@ import { Feather } from '@expo/vector-icons';
 import { TouchableWithoutFeedback, TouchableHighlight } from 'react-native-gesture-handler';
 
 import TouchFeedback from './src/components/TouchFeedback';
+import { otherStyles } from './src/styles';
 
 
 export default function App() {
@@ -91,7 +92,7 @@ function MyTabBar({ state, descriptors, navigation }) {
           "Other":"info"
         })[route.name];
 
-        var color = isFocused ? '#FFA600' : '#4f4f4f';
+        var color = isFocused ? otherStyles.colors.theme : '#4f4f4f';
         var iconSize = 25;
 
         return (
