@@ -88,7 +88,7 @@ export async function getDetails(url){
     var episodesEl = $(".episodes li.clearfix");
     episodesEl.each((i,e)=>{
         let o = {
-            title:$(e).text().trim(),
+            title:$($(e).find("a")).text().trim(),
             url:urlToAbsolute($($(e).find("a")).attr("href")),
         };
         episodes.push(o);
