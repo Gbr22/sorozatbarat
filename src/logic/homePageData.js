@@ -8,8 +8,8 @@ var data = {
     homepage:null,
 }
 
-export async function getHomePageData(){
-    if (!data.homepage){
+export async function getHomePageData(forceRefresh = false){
+    if (!data.homepage || forceRefresh){
         return fetchHomePageData().then((d)=>{
             data.homepage = d;
             return d;
@@ -43,7 +43,7 @@ export async function fetchHomePageData(){
     categories = categories.map(e=>{
         let o = {
             e,
-            title:$(e).find("strong").text(),
+            title:$(e).find("strong").text().replace(/\:$/,""),
             children: chToArr($(e).find("ul li")),
         }
         function getImage(element){

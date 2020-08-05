@@ -45,6 +45,7 @@ export default function SeriesDetailsScreen(props){
                         style={{
                             height: imgHeight,
                             width: imgWidth,
+                            overflow: "hidden"
                         }}
                     >
                         <Image source={{uri:item.image}} 
@@ -229,7 +230,7 @@ export default function SeriesDetailsScreen(props){
                                 var iconSize = 20;
                                 var defColor = "#808080"
                                 return (
-                                    <TouchableOpacity>
+                                    <TouchableOpacity key={e}>
                                         <View
                                             style={{
                                                 paddingVertical: 8,

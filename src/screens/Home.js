@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Fragment } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, RefreshControl } from 'react-native';
 import { getHomePageData } from '../logic/homePageData';
 import styles, { otherStyles } from '../styles';
 import { FlatList, ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
@@ -23,20 +23,43 @@ export default function HomeScreen(props){
 }
 class Home extends React.Component {
     state = {
-        homepageData:null
+        homepageData:null,
+        refreshing: true,
     };
-  
-    componentDidMount() {
-        getHomePageData().then((d)=>{
+    
+    updateData(force=false){
+        return getHomePageData().then((d)=>{
             this.setState({
                 homepageData:d,
             });
+            return d;
         })
-        
     }
+    componentDidMount() {
+        this.updateData().then(d=>{
+            this.setRefreshing(false);
+        })
+    }
+
+    setRefreshing(v){
+        this.setState({
+            refreshing: v,
+        });
+    }
+
+    onRefresh() {
+        this.setRefreshing(true);
+        var t = this;
+        this.updateData(true).then(() => {
+            t.setRefreshing(false);
+        });
+    }
+  
     render(){
+
         var data = this.state.homepageData;
         var props = this.props;
+        var statusbar = <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#0006" translucent = {true}/>;
 
         if (!data){
             return (<View style={styles.screenCont}></View>);
@@ -44,8 +67,12 @@ class Home extends React.Component {
 
         return (
             <View style={styles.screenCont}>
-                <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#0006" translucent = {true}/>
-                <ScrollView style={styles.screenScroll}>
+                { statusbar }
+                <ScrollView style={styles.screenScroll}
+                    refreshControl={
+                        <RefreshControl refreshing={this.state.refreshing} onRefresh={()=>{this.onRefresh()}} />
+                    }
+                >
                 {data.map(category=>{
                     function renderItem({item}){
                         var imageRatio = 136/200;
@@ -76,6 +103,7 @@ class Home extends React.Component {
                                             style={{
                                                 height: imgHeight,
                                                 width: imgWidth,
+                                                overflow: "hidden"
                                             }}
                                         >
                                             <Image source={{uri:item.image}} 
