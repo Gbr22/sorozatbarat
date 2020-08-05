@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Fragment } from 'react';
 import { StyleSheet, Text, View, Image, RefreshControl } from 'react-native';
-import { getHomePageData } from '../logic/homePageData';
+import { getHomePageData } from '../logic/data';
 import styles, { otherStyles } from '../styles';
 import { FlatList, ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
 import TouchFeedback from '../components/TouchFeedback';

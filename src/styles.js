@@ -6,6 +6,10 @@ var styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#fff',
     },
+    container: {
+      backgroundColor: "#fff",
+      flex:1,
+    },
     screenScroll: {
       /* paddingTop: StatusBar.currentHeight + 10, */
     },
