@@ -205,11 +205,10 @@ export default function SeriesDetailsScreen(props){
                                     
 
                                     return (
-                                        <TouchableOpacity>
+                                        <TouchableOpacity key={e}>
 
                                             <Text
                                                 style={s}
-                                                key={e}
                                             >
                                                 {e}
                                             </Text>
