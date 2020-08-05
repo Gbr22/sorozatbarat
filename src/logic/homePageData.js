@@ -18,6 +18,13 @@ export async function getHomePageData(){
         return data.homepage;
     }
 }
+function chToArr(c){
+    var a = [];
+    c.each((i,e)=>{
+        a[i] = e;
+    })
+    return a;
+}
 export async function fetchHomePageData(){
     /* [...document.querySelectorAll(".thumbs")].map(e=>({e,children:e.querySelectorAll("ul li")})) */
     var url = /* "http://www.xhaus.com/headers" */ "https://www.sorozatbarat.online/";
@@ -30,13 +37,7 @@ export async function fetchHomePageData(){
 
     let $ = cheerio.load(text);
 
-    function chToArr(c){
-        var a = [];
-        c.each((i,e)=>{
-            a[i] = e;
-        })
-        return a;
-    }
+    
     
     var categories = chToArr($(".thumbs"));
     categories = categories.map(e=>{
@@ -50,15 +51,17 @@ export async function fetchHomePageData(){
             return prop.match(/url\((.*)\)/)[1].replace(/(^[\'\"])|([\'\"])$/g,"").replace(/^\/\//,"https://");
         }
         o.items = o.children.map(c=>{
+            var anchor = $(c).find("a");
             return {
                 title:$(c).text().trim(),
-                image: getImage($(c).find("a")),
+                image: getImage(anchor),
+                url: anchor.attr("href").replace(/^\//,"https://www.sorozatbarat.online/")
             }
         });
         return o;
     }).filter(e=>e.children.length > 0);
 
-    
+    /* alert(categories[0].items[0].url); */
 
     
     var result = categories.map(e=>{
