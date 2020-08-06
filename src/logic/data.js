@@ -33,6 +33,38 @@ function chToChArr(c,$){
     })
     return a;
 }
+
+export function login(username,password){
+    var url = "https://www.sorozatbarat.online/login";
+    var data = {
+        login:username,
+        password,
+        loginsubmit: "Belépés",
+        redirect:"/profile/"+username
+    }
+    function jsonToQuery(obj){
+        var str = [];
+        for (var p in obj){
+            if (obj.hasOwnProperty(p)) {
+                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+            }
+        }
+
+        return str.join("&");
+    }
+    return fetch(url, {
+        method:"POST",
+
+        headers: {
+            "User-Agent":UA,
+            "Content-Type":"application/x-www-form-urlencoded"
+        },
+        body:jsonToQuery(data)
+    }).then(r=>{
+        return r.text();
+    })
+}
+
 function urlToAbsolute(url){
     return url.replace(/^\//,"https://www.sorozatbarat.online/").replace(/^\/\//,"https://");
 }

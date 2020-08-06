@@ -22,15 +22,19 @@ import SearchScreen from './src/screens/Search';
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        tabBar = {props => <MyTabBar {...props} />}
-      >
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Search" component={SearchScreen} />
-        <Tab.Screen name="Other" component={OtherScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    
+      <NavigationContainer>
+        
+        <Tab.Navigator
+          tabBar = {props => <MyTabBar {...props} />}
+        >
+          <Tab.Screen options={{ title:"Kezdőlap" }} name="Home" component={HomeScreen} />
+          <Tab.Screen options={{ title:"Search" }} name="Search" component={SearchScreen} />
+          <Tab.Screen options={{ title:"Fiók" }} name="Other" component={OtherScreen} />
+        </Tab.Navigator>
+        
+      </NavigationContainer>
+    
   );
 }
 
