@@ -16,11 +16,12 @@ export default class TouchableButton extends React.Component {
             flex: 1,
             transform: [{
                 scale:1,
+                opacity:1
             }]
         }
         
-        var transition = (v)=>{
-            this.viewRef.transitionTo({ scale: v });
+        var transition = (scale,opacity)=>{
+            this.viewRef.transitionTo({ scale, opacity});
         }
         
         return (
@@ -31,10 +32,10 @@ export default class TouchableButton extends React.Component {
                         flex:1,
                     }}
                     onPressOut={() => {
-                        transition(1);
+                        transition(1,1);
                     }}
                     onPressIn={() => {
-                        transition(0.95);
+                        transition(0.95, 0.85);
                     }}
                 >
                     <Animatable.View

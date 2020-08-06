@@ -74,6 +74,24 @@ export async function getDetails(url){
     } catch(err){
         year = "";   
     }
+    var length;
+    try {
+        length = $(infoTable.find(`img[alt*="Időtartam"]`)).parent().text().trim();
+    } catch(err){
+        length = "";   
+    }
+    var imdb = null;
+    try {
+        imdb = urlToAbsolute($(infoTable.find(`img[alt*="imdb"]`)).parent().attr("href"));
+    } catch(err){}
+
+    var porthu = null;
+    try {
+        porthu = urlToAbsolute($(infoTable.find(`img[alt*="Port\.hu"]`)).parent().attr("href"));
+    } catch(err){}
+    
+    
+
     var tags = [];
     infoTable.find(".tags a").each((i,e)=>{
         tags.push({
@@ -114,7 +132,10 @@ export async function getDetails(url){
         episodes,
         title,
         image,
-        year
+        year,
+        length,
+        imdb,
+        porthu
     }
 }
 

@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Fragment } from 'react';
-import { StyleSheet, Text, View, Image, Picker } from 'react-native';
+import { StyleSheet, Text, View, Image, Picker, Linking } from 'react-native';
 import { getHomePageData, getDetails } from '../logic/data';
 import styles, { otherStyles } from '../styles';
 import { FlatList, ScrollView, TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
@@ -9,7 +9,6 @@ import BouncePress from '../components/BouncePress';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Feather } from '@expo/vector-icons';
-
 
 export default class SeriesDetailsScreen extends React.Component {
     state = {
@@ -66,23 +65,55 @@ export default class SeriesDetailsScreen extends React.Component {
         }
         
 
-        var {description, tags, seasons, episodes} = item;
+        var {description, tags, seasons, episodes, length, imdb, porthu} = item;
         var selectedSeason = seasons.filter(e=>e.active)[0] || seasons[seasons.length-1];
         
         var imageRatio = 136/200;
         var imgHeight = 280 - 110;
         var imgWidth = imgHeight * imageRatio;
         
-    
+        var detailsIcon = {
+            
+            resizeMode: 'contain',
+        };
+
+        function DetailIcon({width,height,url,img}){
+            var loadInBrowser = () => {
+                Linking.openURL(url).catch(err => {});
+            };
+            return (
+                <BouncePress
+                    onPress={()=>{
+                        loadInBrowser();
+                    }}
+                >
+                    <Image source={img}    
+                        style={[
+                            detailsIcon,
+                            {
+                                height: height,
+                                width: width,
+                                marginRight: 2
+                            }
+                        ]}
+                    />
+                </BouncePress>
+            )
+        }
+        var s = 0.8;
         return (
-    
+            
             <View
                 style={{
                     backgroundColor: "white",
                     flex:1
                 }}
             >
-                <ScrollView>
+                <ScrollView
+                    contentContainerStyle = {{
+                        paddingBottom: 20
+                    }}
+                >
     
                     <View
                         style={{
@@ -142,6 +173,19 @@ export default class SeriesDetailsScreen extends React.Component {
                     </View>
                     <View
                         style={{
+                            flexDirection:"row",
+                            paddingHorizontal: 20,
+                            paddingBottom:15,
+                            justifyContent: "flex-start",
+                            alignItems:"center"
+                        }}   
+                    >
+                        { imdb ? <DetailIcon width={64*s} height={32*s} img={require('../icons/imdb.png')} url={imdb} /> : null}
+                        { porthu ? <DetailIcon width={76*s} height={32*s} img={require('../icons/porthu.png')} url={porthu} /> : null}
+                        
+                    </View>
+                    <View
+                        style={{
                             paddingHorizontal: 20
                         }}
                     >
@@ -149,7 +193,7 @@ export default class SeriesDetailsScreen extends React.Component {
                             style={{
                                 marginBottom: 15,
                                 flexDirection: "row",
-                                justifyContent: "center",
+                                justifyContent: "flex-start",
                                 alignItems: "center",
                                 flexWrap: "wrap"
                             }}
@@ -159,12 +203,17 @@ export default class SeriesDetailsScreen extends React.Component {
                                 (()=>{
                                     var arr = tags.map(tag=>{
                                         return (
-                                        <Text
-                                            key={tag.url}
-                                            style={[styles.textNormal]}
-                                        >
-                                            {tag.title}
-                                        </Text>
+                                            <TouchableOpacity>
+                                                <Text
+                                                    key={tag.url}
+                                                    style={[
+                                                        styles.textNormal,
+                                                        {color:"#FFA600"}
+                                                    ]}
+                                                >
+                                                    {tag.title}
+                                                </Text>
+                                            </TouchableOpacity>
                                         )
                                     });
                                     arr = arr.reduce((arr, b) => [...arr, b, "|"], []).map((e,i)=>{
@@ -239,7 +288,7 @@ export default class SeriesDetailsScreen extends React.Component {
                                     var iconSize = 20;
                                     var defColor = "#808080"
                                     return (
-                                        <TouchableOpacity key={e.title}>
+                                        <BouncePress key={e.title}>
                                             <View
                                                 style={{
                                                     paddingVertical: 8,
@@ -264,7 +313,7 @@ export default class SeriesDetailsScreen extends React.Component {
                                                 <Feather name="star" size={iconSize} color={defColor} />
                                                 
                                             </View>
-                                        </TouchableOpacity>
+                                        </BouncePress>
                                     )
                                 })
                             }
