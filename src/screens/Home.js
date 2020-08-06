@@ -28,7 +28,7 @@ class Home extends React.Component {
     };
     
     updateData(force=false){
-        return getHomePageData().then((d)=>{
+        return getHomePageData(force).then((d)=>{
             this.setState({
                 homepageData:d,
             });
