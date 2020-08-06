@@ -1,14 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Fragment } from 'react';
 import { StyleSheet, Text, View, Image, Picker, Linking } from 'react-native';
-import { getHomePageData, getDetails } from '../logic/data';
+import { getHomePageData, getDetails, getUserAgent } from '../logic/data';
 import styles, { otherStyles } from '../styles';
-import { FlatList, ScrollView, TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
+import { FlatList, ScrollView, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import TouchFeedback from '../components/TouchFeedback';
 import BouncePress from '../components/BouncePress';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Feather } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons'; 
 
 export default class SeriesDetailsScreen extends React.Component {
     state = {
@@ -287,8 +288,59 @@ export default class SeriesDetailsScreen extends React.Component {
                         >
                             {
                                 episodes.map(e=>{
-                                    var iconSize = 20;
-                                    var defColor = "#808080"
+                                    
+                                    class Action extends React.Component {
+
+                                        state={
+                                            active:false
+                                        }
+                                        componentDidMount(){
+                                            this.setState({
+                                                active:this.props.active
+                                            })
+                                        }
+
+                                        render(){
+                                            var iconSize = 20;
+                                            var defColor = "#808080";
+
+                                            var {color, last=false, icons, url} = this.props;
+                                            var active = this.state.active;
+                                            
+                                            return (
+                                                <TouchableWithoutFeedback
+                                                    onPress={
+                                                        async ()=>{
+                                                            var result = await fetch(url, {
+                                                                headers: {
+                                                                    "User-Agent":getUserAgent(),
+                                                                }
+                                                            }).then(r=>{
+                                                                return r.text();
+                                                            })
+                                                            if (result == "removed"){
+                                                                this.setState({
+                                                                    active:false,
+                                                                })
+                                                            } else if (result == "inserted"){
+                                                                this.setState({
+                                                                    active:true,
+                                                                })
+                                                            }
+                                                            
+                                                        }
+                                                    }
+                                                >
+                                                    <AntDesign
+                                                        name={e.watched.value==true ? icons[0] : icons[1]}
+                                                        size={iconSize} color={active ? color : defColor} style={{marginRight: last ? 0 : 10}}    
+                                                    />
+                                                </TouchableWithoutFeedback>
+                                            )
+                                        }
+                                    }
+                                    
+
                                     return (
                                         <TouchFeedback key={e.title}>
                                             <View
@@ -310,8 +362,8 @@ export default class SeriesDetailsScreen extends React.Component {
                                                 >
                                                     {e.title}
                                                 </Text>
-                                                <Feather name="eye" size={iconSize} color={defColor} style={{marginRight: 10}} />
-                                                <Feather name="star" size={iconSize} color={defColor} />
+                                                <Action url={e.watched.url} active={e.watched.value} color="#00b300" icons={["eye","eyeo"]} />
+                                                <Action url={e.fav.url} active={e.fav.value} color="#e6b800" icons={["star","staro"]} last={true} />
                                                 
                                             </View>
                                         </TouchFeedback>

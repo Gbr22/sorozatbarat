@@ -1,5 +1,10 @@
 
 import {UA, Login} from '../secret.json';
+
+export function getUserAgent(){
+    return UA;
+}
+
 /* import cheerio from 'cheerio'; */
 import cheerio from 'cheerio-without-node-native';
 import { otherStyles } from '../styles';
@@ -166,9 +171,18 @@ export async function getDetails(url){
     var episodes = [];
     var episodesEl = $(".episodes li.clearfix");
     episodesEl.each((i,e)=>{
+        var el = $(e);
+        function getAction(action){
+            return {
+                value:action.hasClass("active"),
+                url:urlToAbsolute(action.attr("href"))
+            }
+        }
         let o = {
             title:$($(e).find("a")).text().trim(),
             url:urlToAbsolute($($(e).find("a")).attr("href")),
+            fav:getAction(el.find(".fav")),
+            watched:getAction(el.find(".watched"))
         };
         episodes.push(o);
     });
