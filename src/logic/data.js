@@ -26,6 +26,13 @@ function chToArr(c){
     })
     return a;
 }
+function chToChArr(c,$){
+    var a = [];
+    c.each((i,e)=>{
+        a[i] = $(e);
+    })
+    return a;
+}
 function urlToAbsolute(url){
     return url.replace(/^\//,"https://www.sorozatbarat.online/").replace(/^\/\//,"https://");
 }
@@ -94,7 +101,8 @@ export async function getDetails(url){
         episodes.push(o);
     });
     
-    var description = "Az 1973-as Feltámad a vadnyugat című film alapján készült sorozat a jövőbe kalauzolja el a nézőt. Helyszíne egy kalandpark, ahol szép kis summáért vakációzhat a lakosság tehetősebb része. A parkban robotok teszik élvezetessé és emlékezetessé a vakációzást, s a látogató elutazhat az egyes történelmi korokba: vadnyugatra, az ókori Rómába vagy éppen a lovagi játékokon párbajozhat. Azonban egy nap az egyik android öntudatra ébred és fellázad...";
+    var description = "";
+    description = infoTable.find(".tags").parent().find("p:not(.tags)").text().trim();
     
     
     
