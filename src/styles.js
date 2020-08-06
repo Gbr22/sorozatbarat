@@ -19,6 +19,9 @@ var styles = StyleSheet.create({
     text: {
       color: "#000D",
     },
+    link: {
+      color:"#FFA600"
+    },
     textNormal:{
       color: "#0009",
       fontSize: 15

@@ -211,7 +211,7 @@ export default class SeriesDetailsScreen extends React.Component {
                                                     
                                                     style={[
                                                         styles.textNormal,
-                                                        {color:"#FFA600"}
+                                                        styles.link
                                                     ]}
                                                 >
                                                     {tag.title}
@@ -342,7 +342,13 @@ export default class SeriesDetailsScreen extends React.Component {
                                     
 
                                     return (
-                                        <TouchFeedback key={e.title}>
+                                        <TouchFeedback key={e.title}
+                                            onPress={()=>{
+                                                this.props.navigation.navigate("Links", {
+                                                    url: e.url,
+                                                });
+                                            }}
+                                        >
                                             <View
                                                 style={{
                                                     paddingVertical: 8,

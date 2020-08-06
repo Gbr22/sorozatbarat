@@ -92,12 +92,68 @@ export function getPlayEndURL(referer,start){
         return r.url;
     })
 }
-getPlayEndURL(
-    "https://www.sorozatbarat.online/episode/249278/Rick_es_Morty_online_sorozat_04_evad_01_resz",
-    "https://www.sorozatbarat.online/video/redirect/BaQhPTXBBvvcfNJ8Yqfnl1ZzBanYlKmcIpl6i5T7UPO6lJF1CwoRAUps-_vnLgG4yAYlq4E7ApXHr5P2q0jEsuYl6cmPZMLvO0SaBwP0MbMPcA,,/Rick_es_Morty_online_sorozat_04_evad_01_resz"
-).then(url=>{
-    Linking.openURL(url).catch(err => {});
-})
+
+
+export async function getLinks(url){
+    
+    var response = await fetch(url, {
+        headers: {
+            "User-Agent":UA,
+        }
+    });
+
+    var text = await response.text();
+
+    let $ = cheerio.load(text);
+
+    var table = $(".episodes");
+    
+    var items = chToChArr(table.find("tr"),$);
+
+    var title = $(".navTitle").text().trim()
+    var episode = $("ul li.active").text().trim();
+    
+    items = items.map((e,i)=>{
+        var row = chToChArr(e.find("td"),$);
+        if (row.length <= 1) {
+            return null;
+        }
+        var links = chToChArr(e.find("a"),$);
+        
+        if (links.length == 0){
+            return null;
+        }
+
+        var o;
+        
+        try {
+            var uploaderURL = row[1].find("a").attr("href");
+            o = {
+                title:row[1].text().trim().split("Feltöltő:")[0].trim(),
+                uploader: uploaderURL ? {
+                    url:uploaderURL ? urlToAbsolute(uploaderURL) : null,
+                    username:row[1].find("a").text().trim()
+                } : null,
+                viewcount:row[2].text().trim(),
+                url:urlToAbsolute(links[links.length-1].attr("href")),
+            };
+        } catch(err){
+            alert(err);
+        }
+        return o;
+        
+        
+        
+    });
+    items = items.filter(e=>e);
+
+    return {
+        url,
+        items,
+        episode,
+        title,
+    }
+}
 export async function getAutocomplete(search){
     var url = "https://www.sorozatbarat.online/series/autocompleteV2?term="+escape(search);
     return fetch(url, {
