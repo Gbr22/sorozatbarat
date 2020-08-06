@@ -203,9 +203,11 @@ export default class SeriesDetailsScreen extends React.Component {
                                 (()=>{
                                     var arr = tags.map(tag=>{
                                         return (
-                                            <TouchableOpacity>
+                                            <TouchableOpacity
+                                                key={tag.url}
+                                            >
                                                 <Text
-                                                    key={tag.url}
+                                                    
                                                     style={[
                                                         styles.textNormal,
                                                         {color:"#FFA600"}

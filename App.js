@@ -95,7 +95,7 @@ function MyTabBar({ state, descriptors, navigation }) {
         };
         var iconName = ({
           "Home":"home",
-          "Other":"info",
+          "Other":"user",
           "Search":"search"
         })[route.name];
 

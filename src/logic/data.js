@@ -9,6 +9,11 @@ var data = {
     homepage:null,
 }
 
+var user = null;
+export function getUser(){
+    return user;
+}
+
 export async function getHomePageData(forceRefresh = false){
     if (!data.homepage || forceRefresh){
         return fetchHomePageData().then((d)=>{
@@ -19,6 +24,8 @@ export async function getHomePageData(forceRefresh = false){
         return data.homepage;
     }
 }
+
+
 function chToArr(c){
     var a = [];
     c.each((i,e)=>{
@@ -197,8 +204,6 @@ export async function fetchHomePageData(){
 
 
     let $ = cheerio.load(text);
-
-    
     
     var categories = chToArr($(".thumbs"));
     categories = categories.map(e=>{
@@ -232,4 +237,51 @@ export async function fetchHomePageData(){
         }
     })
     return result;
+}
+export async function getMe(){
+    if (user == null){
+        user = await fetchMe();
+        return user;
+    }
+    return user;
+}
+export async function fetchMe(){
+    var url = /* "http://www.xhaus.com/headers" */ "https://www.sorozatbarat.online/";
+    var text = await fetch(url, {
+        headers: {
+            "User-Agent":UA,
+        }
+    }).then(r=>r.text());
+
+
+    let $ = cheerio.load(text);
+
+    var isLoggedIn = $(".user").text().indexOf("Belépés") == -1;
+
+    if (user == null && isLoggedIn){
+        $(".user #account").remove();
+        $(".user p *").remove();
+
+        var username = $(".user p").text().trim();
+        user = await fetchUserData(username);
+    }
+    return user;
+}
+
+
+export async function fetchUserData(username){
+    var url = "https://www.sorozatbarat.online/profile/"+username;
+    var text = await fetch(url, {
+        headers: {
+            "User-Agent":UA,
+        }
+    }).then(r=>r.text());
+
+
+    let $ = cheerio.load(text);
+    var avatar = urlToAbsolute($("#page .image img").attr("src"));
+    return {
+        username,
+        avatar
+    }
 }

@@ -1,10 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, SafeAreaView, Button } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Button, Image } from 'react-native';
 import styles from '../styles';
 import getStackItems from '../components/StackItems';
 import { createStackNavigator } from '@react-navigation/stack';
 import CustomButton from '../components/CustomButton';
+import { getUser, getMe } from '../logic/data';
+
 
 const Stack = createStackNavigator();
 
@@ -18,10 +20,21 @@ export default function OtherScreen() {
     );
 }
 class Other extends React.Component {
+  state = {
+    user:null,
+    refreshing: true,
+  };
+  componentDidMount() {
+    getMe().then(d=>{
+      this.setState({
+        user: d,
+      })
+    })
+  }
   render(){
-    var loggedIn = false;
+    var user = this.state.user;
     function getInner(){
-      if (loggedIn == false){
+      if (user == null){
         return (
           <View
             style={{
@@ -36,6 +49,38 @@ class Other extends React.Component {
               }}
             >
               <CustomButton title="Bejelentkezés" color="#ffd280" />
+            </View>
+          </View>
+        )
+      } else {
+        return (
+          <View
+            style={{
+              justifyContent:"center",
+              alignItems:"center",
+            }}
+          >
+            <View
+              style={{
+                width: 120,
+                height: 120,
+                borderRadius: 30,
+                overflow: "hidden"
+              }}
+            >
+              <Image source={{uri:user.avatar}} 
+                style={{
+                  flex:1
+                }}
+              />
+            </View>
+            <Text style={styles.h1}>{user.username}</Text>
+            <View
+              style={{
+                width: 120
+              }}
+            >
+              <CustomButton title="Kijelentkezés" color="#ffd280" />
             </View>
           </View>
         )

@@ -3,7 +3,9 @@ import SeriesDetailsScreen from '../screens/SeriesDetails';
 
 
 export default function getStackItems(Stack){
-    return [
-        <Stack.Screen name="Details" component={SeriesDetailsScreen} options={{ title:"Sorozat" }} />,
-    ];
+    return (
+        <Fragment>
+            <Stack.Screen name="Details" component={SeriesDetailsScreen} options={{ title:"Sorozat" }} />
+        </Fragment>
+    );
 }
