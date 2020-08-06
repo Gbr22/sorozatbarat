@@ -36,7 +36,22 @@ function chToChArr(c,$){
 function urlToAbsolute(url){
     return url.replace(/^\//,"https://www.sorozatbarat.online/").replace(/^\/\//,"https://");
 }
+export async function getAutocomplete(search){
+    var url = "https://www.sorozatbarat.online/series/autocompleteV2?term="+escape(search);
+    return fetch(url, {
+        headers: {
+            "User-Agent":UA,
+        }
+    }).then(r=>{
+        return r.json();
+    }).then(json=>{
+        json.forEach(e=>{
+            e.url = urlToAbsolute(e.url);
+        })
+        return json;
+    })
 
+}
 export async function getDetails(url){
 
     var response = await fetch(url, {

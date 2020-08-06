@@ -9,16 +9,17 @@ import BouncePress from '../components/BouncePress';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SeriesDetailsScreen from './SeriesDetails';
+import getStackItems from '../components/StackItems';
 
 
-const HomeStack = createStackNavigator();
+const Stack = createStackNavigator();
 
 export default function HomeScreen(props){
     return (
-        <HomeStack.Navigator initialRouteName="Home">
-            <HomeStack.Screen name="Home" component={Home} options={{ title:"Kezdőlap" }}/>
-            <HomeStack.Screen name="Details" component={SeriesDetailsScreen} options={{ title:"Sorozat" }} />
-        </HomeStack.Navigator>
+        <Stack.Navigator initialRouteName="Home">
+            <Stack.Screen name="Home" component={Home} options={{ title:"Kezdőlap" }}/>
+            { getStackItems(Stack) }
+        </Stack.Navigator>
     );
 }
 class Home extends React.Component {

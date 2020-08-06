@@ -17,6 +17,7 @@ import { TouchableWithoutFeedback, TouchableHighlight } from 'react-native-gestu
 
 import TouchFeedback from './src/components/TouchFeedback';
 import { otherStyles } from './src/styles';
+import SearchScreen from './src/screens/Search';
 
 
 export default function App() {
@@ -26,6 +27,7 @@ export default function App() {
         tabBar = {props => <MyTabBar {...props} />}
       >
         <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen name="Other" component={OtherScreen} />
       </Tab.Navigator>
     </NavigationContainer>
@@ -89,7 +91,8 @@ function MyTabBar({ state, descriptors, navigation }) {
         };
         var iconName = ({
           "Home":"home",
-          "Other":"info"
+          "Other":"info",
+          "Search":"search"
         })[route.name];
 
         var color = isFocused ? otherStyles.colors.theme : '#4f4f4f';

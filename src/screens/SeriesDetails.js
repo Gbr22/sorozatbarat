@@ -280,7 +280,7 @@ export default class SeriesDetailsScreen extends React.Component {
                         </View>
                         <View
                             style={{
-                                paddingHorizontal: 20,
+                                paddingHorizontal: 0,
                             }}
                         >
                             {
@@ -288,16 +288,15 @@ export default class SeriesDetailsScreen extends React.Component {
                                     var iconSize = 20;
                                     var defColor = "#808080"
                                     return (
-                                        <BouncePress key={e.title}>
+                                        <TouchFeedback key={e.title}>
                                             <View
                                                 style={{
                                                     paddingVertical: 8,
-                                                    paddingHorizontal: 12,
+                                                    paddingHorizontal: 20,
                                                     backgroundColor: "white",
                                                     borderRadius: 12,
-                                                    borderWidth: 1,
-                                                    borderColor: "#e6e6e6",
-                                                    marginBottom: 8,
+                                                    /* borderWidth: 1,
+                                                    borderColor: "#e6e6e6", */
                                                     flexDirection: "row",
                                                     alignItems: "center"
                                                 }}
@@ -313,7 +312,7 @@ export default class SeriesDetailsScreen extends React.Component {
                                                 <Feather name="star" size={iconSize} color={defColor} />
                                                 
                                             </View>
-                                        </BouncePress>
+                                        </TouchFeedback>
                                     )
                                 })
                             }
