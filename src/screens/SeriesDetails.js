@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Fragment } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Picker } from 'react-native';
 import { getHomePageData, getDetails } from '../logic/data';
 import styles, { otherStyles } from '../styles';
 import { FlatList, ScrollView, TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
@@ -67,7 +67,7 @@ export default class SeriesDetailsScreen extends React.Component {
         
 
         var {description, tags, seasons, episodes} = item;
-        var selectedSeason = seasons[seasons.length-1];
+        var selectedSeason = seasons.filter(e=>e.active)[0] || seasons[seasons.length-1];
         
         var imageRatio = 136/200;
         var imgHeight = 280 - 110;
@@ -211,69 +211,22 @@ export default class SeriesDetailsScreen extends React.Component {
                                 alignItems: "center",
                             }}
                         >
-                            
-                            <ScrollView
-
-                                horizontal={true}
-                                
-                                style={{
-                                    
-                                    shadowColor: "#000",
-                                    shadowOffset: {
-                                        width: 0,
-                                        height: 1,
-                                    },
-                                    shadowOpacity: 0.12,
-                                    shadowRadius: 2.22,
-    
-                                    elevation: 1,
-                                    borderRadius: 10,
-                                    backgroundColor: "hsl(0, 0%, 98%)",
-                                    borderWidth: 0,
-                                    overflow: "hidden",
+                            <Picker
+                                selectedValue={selectedSeason.url}
+                                style={{ height: 50, width: 150, flex:1 }}
+                                onValueChange={(itemValue, itemIndex) => {
+                                    this.openURL(itemValue);
                                 }}
-                                contentContainerStyle={{
-                                }}
+                                mode="dialog"
                             >
                                 {
                                     seasons.map((e,i)=>{
-                                        var first = i == 0;
-                                        var last = i == seasons.length-1;
-                                        var selected = e.active;
-    
-                                        var s = [
-                                            {
-                                                paddingVertical: 5,
-                                                paddingHorizontal: 10,
-                                                borderRadius: 10,
-                                                shadowColor: "#000",
-                                            }
-                                        ];
-                                        if (selected){
-                                            s.push({
-                                                backgroundColor: "#ffedcc",
-                                                color: "#cc8500"
-                                            })
-                                        }
-                                        
-    
                                         return (
-                                            <TouchableOpacity key={e.url}
-                                                onPress={()=>{
-                                                    this.openURL(e.url)
-                                                }}
-                                            >
-    
-                                                <Text
-                                                    style={s}
-                                                >
-                                                    {e.title}
-                                                </Text>
-                                            </TouchableOpacity>
-                                        )
+                                            <Picker.Item label={e.title} key={e.url} value={e.url} />
+                                        );
                                     })
                                 }
-                            </ScrollView>
+                            </Picker>
                             
                         </View>
                         <View
