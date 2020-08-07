@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, Button, Image } from 'react-native';
 import styles from '../styles';
 import getStackItems from '../components/StackItems';
@@ -23,15 +23,14 @@ export default function OtherScreen() {
 
 class Other extends React.Component {
   state = {
-    user:null,
     refreshing: true,
   };
   componentDidMount() {
-    getMe().then(d=>{
+    /* getMe().then(d=>{
       this.setState({
         user: d,
       })
-    })
+    }) */
   }
   render(){
     /* const [state, dispatch] = useGlobalState(); */
@@ -39,89 +38,7 @@ class Other extends React.Component {
     var user = this.state.user;
     var props = this.props;
 
-    function afterLogout(){
-      this.setState({
-        user:null
-      })
-    }
-    function getInner(){
-      if (user == null){
-        return (
-          <View
-            style={{
-              justifyContent:"center",
-              alignItems:"center"
-            }}
-          >
-            <GlobalContext.Consumer>
-              {({state, update}) => (
-                <View>
-                  <CustomButton 
-                    title={state.num+""}
-                    onPress={()=>{
-                      update({
-                        num: state.num+1
-                      });
-                    }}
-                  />
-                </View>
-              )}
-            </GlobalContext.Consumer>
-            <Text style={styles.h1}>Nincs bejelentkezve</Text>
-            <View
-              style={{
-                width: 120
-              }}
-            >
-              
-              <CustomButton title="Bejelentkezés"
-                onPress={()=>{
-                  props.navigation.navigate("Login", {});
-                }}
-              />
-            </View>
-          </View>
-        )
-      } else {
-        return (
-          <View
-            style={{
-              justifyContent:"center",
-              alignItems:"center",
-            }}
-          >
-            <View
-              style={{
-                width: 120,
-                height: 120,
-                borderRadius: 30,
-                overflow: "hidden"
-              }}
-            >
-              <Image source={{uri:user.avatar}} 
-                style={{
-                  flex:1
-                }}
-              />
-            </View>
-            <Text style={styles.h1}>{user.username}</Text>
-            <View
-              style={{
-                width: 120
-              }}
-            >
-              <CustomButton title="Kijelentkezés"
-                onPress={()=>{
-                  logout().then(()=>{
-                    afterLogout();
-                  })
-                }}
-              />
-            </View>
-          </View>
-        )
-      }
-    }
+    
 
     return (
       <View
@@ -133,9 +50,75 @@ class Other extends React.Component {
           }
         ]}
       >
-        {
-          getInner()
-        }
+        <GlobalContext.Consumer>
+          {({state, update}) => (
+            <Fragment>
+              {
+                state.user ?
+                <Fragment>
+                  <View
+                    style={{
+                      justifyContent:"center",
+                      alignItems:"center",
+                    }}
+                  >
+                    <View
+                      style={{
+                        width: 120,
+                        height: 120,
+                        borderRadius: 30,
+                        overflow: "hidden"
+                      }}
+                    >
+                      <Image source={{uri:state.user.avatar}} 
+                        style={{
+                          flex:1
+                        }}
+                      />
+                    </View>
+                    <Text style={styles.h1}>{state.user.username}</Text>
+                    <View
+                      style={{
+                        width: 120
+                      }}
+                    >
+                      <CustomButton title="Kijelentkezés"
+                        onPress={()=>{
+                          logout().then(()=>{
+                            update({user:null})
+                          })
+                        }}
+                      />
+                    </View>
+                  </View>
+                </Fragment> : 
+                
+                <Fragment>
+                  <View
+                    style={{
+                      justifyContent:"center",
+                      alignItems:"center"
+                    }}
+                  >
+                    <Text style={styles.h1}>Nincs bejelentkezve</Text>
+                    <View
+                      style={{
+                        width: 120
+                      }}
+                    >
+                      
+                      <CustomButton title="Bejelentkezés"
+                        onPress={()=>{
+                          props.navigation.navigate("Login", {});
+                        }}
+                      />
+                    </View>
+                  </View>
+                </Fragment>
+              }
+            </Fragment>
+          )}
+        </GlobalContext.Consumer>
       </View>
     )
   }

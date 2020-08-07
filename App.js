@@ -18,13 +18,16 @@ import { TouchableWithoutFeedback, TouchableHighlight } from 'react-native-gestu
 import TouchFeedback from './src/components/TouchFeedback';
 import { otherStyles } from './src/styles';
 import SearchScreen from './src/screens/Search';
-import { GlobalContext, initialGlobalState } from './src/GlobalState';
+import { GlobalContext, initialGlobalState, setUpdate, AppMouted } from './src/GlobalState';
 
 
 export default class App extends React.Component {
   state=Object.assign({},initialGlobalState);
   componentDidMount(){
-    
+    setUpdate((o)=>{
+      this.update(o);
+    });
+    AppMouted();
   }
   update(o){
     this.setState(o);

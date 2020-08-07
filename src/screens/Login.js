@@ -3,9 +3,10 @@ import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, Button, Image } from 'react-native';
 import styles, { otherStyles } from '../styles';
 import CustomButton from '../components/CustomButton';
-import { getUser, getMe, logout, login } from '../logic/data';
+import { getUser, getMe, logout, login, fetchUserData } from '../logic/data';
 import { TextInput } from 'react-native-gesture-handler';
 import CustomTextInput from '../components/CustomTextInput';
+import { GlobalContext } from '../GlobalState';
 
 
 export default class LoginScreen extends React.Component {
@@ -27,70 +28,81 @@ export default class LoginScreen extends React.Component {
         })
     }
     return (
-        <View
-            style={[
-            styles.screenCont,
-            {
-                justifyContent:"center",
-                alignItems:"center",
-            }
-            ]}
-        >
-        <View
-            style={{
-              justifyContent:"center",
-              alignItems:"center",
-            }}
-        >
+        <GlobalContext.Consumer>
+          {({state, update}) => (
+            <View
+                style={[
+                styles.screenCont,
+                {
+                    justifyContent:"center",
+                    alignItems:"center",
+                }
+                ]}
+            >
             <View
                 style={{
-                    flexDirection: "row",
-                    marginBottom: 15
+                    justifyContent:"center",
+                    alignItems:"center",
                 }}
             >
-                <Text
-                    style={[
-                        localstyles.title,
-                        {
-                            color: "#1a1a1a"
-                        }
-                    ]}
-                >Sorozat</Text>
-                <Text
-                    style={[
-                        localstyles.title,
-                        {
-                            color: otherStyles.colors.theme,
-                        }
-                    ]}
-                >Barát</Text>
-            </View>
-            <View style={cont}>
-                <CustomTextInput placeholder="Felhasználónév" iconLeft="user-alt" autoCompleteType="username" style={[itemStyle]}
-                    onChangeText={text => onChangeText("username",text)}
-                />
-            </View>
-            <View style={cont}>
-                <CustomTextInput placeholder="Jelszó" iconLeft="key" autoCompleteType="password" secureTextEntry={true} style={[itemStyle]} 
-                    onChangeText={text => onChangeText("password",text)}
-                />
-            </View>
-            <View style={cont}>
-                <CustomButton title="Bejelentkezés" style={[itemStyle]}
-                    onPress={()=>{
-                        var {username, password} = this.state;
-                        
-                        login(username,password).then(()=>{
-                            goHome();
-                        }).catch(err=>{
-                            alert(err.message);
-                        })
-
+                <View
+                    style={{
+                        flexDirection: "row",
+                        marginBottom: 15
                     }}
-                />
+                >
+                    <Text
+                        style={[
+                            localstyles.title,
+                            {
+                                color: "#1a1a1a"
+                            }
+                        ]}
+                    >Sorozat</Text>
+                    <Text
+                        style={[
+                            localstyles.title,
+                            {
+                                color: otherStyles.colors.theme,
+                            }
+                        ]}
+                    >Barát</Text>
+                </View>
+                <View style={cont}>
+                    <CustomTextInput placeholder="Felhasználónév" iconLeft="user-alt" autoCompleteType="username" style={[itemStyle]}
+                        onChangeText={text => onChangeText("username",text)}
+                    />
+                </View>
+                <View style={cont}>
+                    <CustomTextInput placeholder="Jelszó" iconLeft="key" autoCompleteType="password" secureTextEntry={true} style={[itemStyle]} 
+                        onChangeText={text => onChangeText("password",text)}
+                    />
+                </View>
+                <View style={cont}>
+                    <CustomButton title="Bejelentkezés" style={[itemStyle]}
+                        onPress={()=>{
+                            var {username, password} = this.state;
+                            
+                            
+                            login(username,password).then(()=>{
+                                fetchUserData(username).then(user=>{
+                                    update({user});
+                                    goHome();
+                                })
+                                
+                                
+                            }).catch(err=>{
+                                alert(err.message);
+                            })
+    
+                        }}
+                    />
+                </View>
             </View>
-        </View>
-      </View>
+            </View>
+        
+          )}
+        </GlobalContext.Consumer>
     )
   }
 }

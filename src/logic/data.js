@@ -15,7 +15,6 @@ var data = {
     homepage:null,
 }
 
-var user = null;
 export function getUser(){
     return user;
 }
@@ -49,10 +48,7 @@ function chToChArr(c,$){
 
 export async function logout(){
     var url = "https://www.sorozatbarat.online/logout";
-    return fetch(url).then(()=>{
-        user = null;
-        return user;
-    });
+    return fetch(url);
 }
 export async function login(username,password){
     var url = "https://www.sorozatbarat.online/login";
@@ -72,6 +68,19 @@ export async function login(username,password){
 
         return str.join("&");
     }
+    const getCookies = function(response) {
+        const cookies = {}
+        for (const [name, values] of response.headers) {
+          if (name === 'set-cookie') {
+            for (const cookie of values.split(';')) {
+              const [key, value] = cookie.split('=')
+              cookies[key] = value
+            }
+          }
+        }
+      
+        return cookies
+    }
     alert(`aa ${username}, ${password}`)
     return fetch(url, {
         method:"POST",
@@ -82,7 +91,8 @@ export async function login(username,password){
         },
         body:jsonToQuery(data)
     }).then(r=>{
-        alert(r.status);
+        var cookies = getCookies(r);
+        alert(JSON.stringify(r.headers));
         if (r.status == 200){
             return;
         } else {
@@ -339,13 +349,6 @@ export async function fetchHomePageData(){
     })
     return result;
 }
-export async function getMe(){
-    if (user == null){
-        user = await fetchMe();
-        return user;
-    }
-    return user;
-}
 export async function fetchMe(){
     var url = /* "http://www.xhaus.com/headers" */ "https://www.sorozatbarat.online/";
     var text = await fetch(url, {
@@ -359,7 +362,8 @@ export async function fetchMe(){
 
     var isLoggedIn = $(".user").text().indexOf("Belépés") == -1;
 
-    if (user == null && isLoggedIn){
+    var user = null;
+    if (isLoggedIn){
         $(".user #account").remove();
         $(".user p *").remove();
 
