@@ -5,8 +5,8 @@ import styles from '../styles';
 import getStackItems from '../components/StackItems';
 import { createStackNavigator } from '@react-navigation/stack';
 import CustomButton from '../components/CustomButton';
-import { getUser, getMe } from '../logic/data';
-
+import { getUser, getMe, logout } from '../logic/data';
+import { GlobalContext } from '../GlobalState'
 
 const Stack = createStackNavigator();
 
@@ -19,6 +19,8 @@ export default function OtherScreen() {
       
     );
 }
+
+
 class Other extends React.Component {
   state = {
     user:null,
@@ -32,7 +34,16 @@ class Other extends React.Component {
     })
   }
   render(){
+    /* const [state, dispatch] = useGlobalState(); */
+
     var user = this.state.user;
+    var props = this.props;
+
+    function afterLogout(){
+      this.setState({
+        user:null
+      })
+    }
     function getInner(){
       if (user == null){
         return (
@@ -42,13 +53,32 @@ class Other extends React.Component {
               alignItems:"center"
             }}
           >
+            <GlobalContext.Consumer>
+              {({state, update}) => (
+                <View>
+                  <CustomButton 
+                    title={state.num+""}
+                    onPress={()=>{
+                      update({
+                        num: state.num+1
+                      });
+                    }}
+                  />
+                </View>
+              )}
+            </GlobalContext.Consumer>
             <Text style={styles.h1}>Nincs bejelentkezve</Text>
             <View
               style={{
                 width: 120
               }}
             >
-              <CustomButton title="Bejelentkezés" color="#ffd280" />
+              
+              <CustomButton title="Bejelentkezés"
+                onPress={()=>{
+                  props.navigation.navigate("Login", {});
+                }}
+              />
             </View>
           </View>
         )
@@ -80,7 +110,13 @@ class Other extends React.Component {
                 width: 120
               }}
             >
-              <CustomButton title="Kijelentkezés" color="#ffd280" />
+              <CustomButton title="Kijelentkezés"
+                onPress={()=>{
+                  logout().then(()=>{
+                    afterLogout();
+                  })
+                }}
+              />
             </View>
           </View>
         )

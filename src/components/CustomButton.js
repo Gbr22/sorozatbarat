@@ -15,13 +15,13 @@ export default class CustomButton extends React.Component {
                     {
                         justifyContent:"center",
                         alignItems:"center",
-                        backgroundColor:this.props.color || "#fff",
+                        backgroundColor:this.props.color || "#ffd280",
                         borderRadius: 8,
                         paddingHorizontal: 15,
                         paddingVertical: 10,
                     }
                 ]}
-                background={TouchableNativeFeedback.Ripple('rgba(191, 191, 191, 0.5)', false)}
+                background={TouchableNativeFeedback.Ripple('rgba(255, 255, 255, 0.5)', false)}
             >
                 <Text
                     style={{

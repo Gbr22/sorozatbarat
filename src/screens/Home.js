@@ -10,6 +10,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SeriesDetailsScreen from './SeriesDetails';
 import getStackItems from '../components/StackItems';
+import CustomButton from '../components/CustomButton';
+import { GlobalContext } from '../GlobalState';
 
 
 const Stack = createStackNavigator();
@@ -69,11 +71,14 @@ class Home extends React.Component {
         return (
             <View style={styles.screenCont}>
                 { statusbar }
+
+                
                 <ScrollView style={styles.screenScroll}
                     refreshControl={
                         <RefreshControl refreshing={this.state.refreshing} onRefresh={()=>{this.onRefresh()}} />
                     }
                 >
+                    
                 {data.map(category=>{
                     function renderItem({item}){
                         var imageRatio = 136/200;

@@ -18,11 +18,22 @@ import { TouchableWithoutFeedback, TouchableHighlight } from 'react-native-gestu
 import TouchFeedback from './src/components/TouchFeedback';
 import { otherStyles } from './src/styles';
 import SearchScreen from './src/screens/Search';
+import { GlobalContext, initialGlobalState } from './src/GlobalState';
 
 
-export default function App() {
-  return (
+export default class App extends React.Component {
+  state=Object.assign({},initialGlobalState);
+  componentDidMount(){
     
+  }
+  update(o){
+    this.setState(o);
+  }
+  render(){
+
+    return (
+      <GlobalContext.Provider value={{state:this.state, update:(o)=>{this.update(o)}}}>
+      
       <NavigationContainer>
         
         <Tab.Navigator
@@ -34,8 +45,10 @@ export default function App() {
         </Tab.Navigator>
         
       </NavigationContainer>
-    
-  );
+
+      </GlobalContext.Provider>
+    );
+  }
 }
 
 

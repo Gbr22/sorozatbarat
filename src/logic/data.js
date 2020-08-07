@@ -47,7 +47,14 @@ function chToChArr(c,$){
     return a;
 }
 
-export function login(username,password){
+export async function logout(){
+    var url = "https://www.sorozatbarat.online/logout";
+    return fetch(url).then(()=>{
+        user = null;
+        return user;
+    });
+}
+export async function login(username,password){
     var url = "https://www.sorozatbarat.online/login";
     var data = {
         login:username,
@@ -65,6 +72,7 @@ export function login(username,password){
 
         return str.join("&");
     }
+    alert(`aa ${username}, ${password}`)
     return fetch(url, {
         method:"POST",
 
@@ -74,7 +82,12 @@ export function login(username,password){
         },
         body:jsonToQuery(data)
     }).then(r=>{
-        return r.text();
+        alert(r.status);
+        if (r.status == 200){
+            return;
+        } else {
+            throw Error("Sikertelen Belépés");
+        }
     })
 }
 
