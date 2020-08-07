@@ -1,5 +1,6 @@
 
 import {UA, Login} from '../secret.json';
+import Cookie from 'react-native-cookie';
 
 export function getUserAgent(){
     return UA;
@@ -68,20 +69,6 @@ export async function login(username,password){
 
         return str.join("&");
     }
-    const getCookies = function(response) {
-        const cookies = {}
-        for (const [name, values] of response.headers) {
-          if (name === 'set-cookie') {
-            for (const cookie of values.split(';')) {
-              const [key, value] = cookie.split('=')
-              cookies[key] = value
-            }
-          }
-        }
-      
-        return cookies
-    }
-    alert(`aa ${username}, ${password}`)
     return fetch(url, {
         method:"POST",
 
@@ -91,12 +78,13 @@ export async function login(username,password){
         },
         body:jsonToQuery(data)
     }).then(r=>{
-        var cookies = getCookies(r);
-        alert(JSON.stringify(r.headers));
-        if (r.status == 200){
+        return Cookie.get("https://www.sorozatbarat.online/");
+    }).then(c=>{
+        var loggedIn = c.member;
+        if (loggedIn){
             return;
         } else {
-            throw Error("Sikertelen Belépés");
+            throw new Error("Sikertelen bejelenetkezés");
         }
     })
 }
