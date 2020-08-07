@@ -332,7 +332,7 @@ export default class SeriesDetailsScreen extends React.Component {
                                                     }
                                                 >
                                                     <AntDesign
-                                                        name={e.watched.value==true ? icons[0] : icons[1]}
+                                                        name={active==true ? icons[0] : icons[1]}
                                                         size={iconSize} color={active ? color : defColor} style={{marginRight: last ? 0 : 10}}    
                                                     />
                                                 </TouchableWithoutFeedback>
@@ -343,15 +343,11 @@ export default class SeriesDetailsScreen extends React.Component {
 
                                     return (
                                         <TouchFeedback key={e.title}
-                                            onPress={()=>{
-                                                this.props.navigation.navigate("Links", {
-                                                    url: e.url,
-                                                });
-                                            }}
+                                            
                                         >
                                             <View
                                                 style={{
-                                                    paddingVertical: 8,
+                                                    
                                                     paddingHorizontal: 20,
                                                     backgroundColor: "white",
                                                     borderRadius: 12,
@@ -361,13 +357,29 @@ export default class SeriesDetailsScreen extends React.Component {
                                                     alignItems: "center"
                                                 }}
                                             >
-                                                <Text
-                                                    style={{
-                                                        flex:1
-                                                    }}
-                                                >
-                                                    {e.title}
-                                                </Text>
+                                                <View style={{
+                                                    flex:1,
+                                                }}>
+                                                    <TouchableWithoutFeedback
+                                                        style={{
+                                                            
+                                                            paddingVertical: 8,
+                                                        }}
+                                                        onPress={()=>{
+                                                            this.props.navigation.navigate("Links", {
+                                                                url: e.url,
+                                                            });
+                                                        }}
+                                                    >
+                                                        <Text
+                                                            style={{
+                                                                
+                                                            }}
+                                                        >
+                                                            {e.title}
+                                                        </Text>
+                                                    </TouchableWithoutFeedback>
+                                                </View>
                                                 <Action url={e.watched.url} active={e.watched.value} color="#00b300" icons={["eye","eyeo"]} />
                                                 <Action url={e.fav.url} active={e.fav.value} color="#e6b800" icons={["star","staro"]} last={true} />
                                                 
