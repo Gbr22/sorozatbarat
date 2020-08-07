@@ -16,7 +16,7 @@ import { Feather } from '@expo/vector-icons';
 import { TouchableWithoutFeedback, TouchableHighlight } from 'react-native-gesture-handler';
 
 import TouchFeedback from './src/components/TouchFeedback';
-import { otherStyles } from './src/styles';
+import styles, { otherStyles } from './src/styles';
 import SearchScreen from './src/screens/Search';
 import { GlobalContext, initialGlobalState, setUpdate, AppMouted } from './src/GlobalState';
 
@@ -115,7 +115,7 @@ function MyTabBar({ state, descriptors, navigation }) {
           "Search":"search"
         })[route.name];
 
-        var color = isFocused ? otherStyles.colors.theme : '#4f4f4f';
+        var color = isFocused ? otherStyles.colors.theme : otherStyles.theme.colorNormal;
         var iconSize = 25;
 
         return (
@@ -130,12 +130,15 @@ function MyTabBar({ state, descriptors, navigation }) {
             key={route.key}
           >
             <View
-              style={{
-                flex:1,
-                justifyContent: "center",
-                alignItems:"center",
-                paddingVertical: 5
-              }}
+              style={[
+                styles.container,
+                {
+                  flex:1,
+                  justifyContent: "center",
+                  alignItems:"center",
+                  paddingVertical: 5
+                }
+              ]}
             >
               <Feather name={iconName} size={iconSize} color={color} />
 

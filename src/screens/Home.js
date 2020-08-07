@@ -129,7 +129,9 @@ class Home extends React.Component {
                                                 paddingTop:5,
                                             }}
                                         >
-                                            <Text>{item.title}</Text>
+                                            <Text
+                                                style={styles.textNormal}
+                                            >{item.title}</Text>
                                         </View>
 
                                     </View>

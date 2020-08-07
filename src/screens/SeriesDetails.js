@@ -105,10 +105,7 @@ export default class SeriesDetailsScreen extends React.Component {
         return (
             
             <View
-                style={{
-                    backgroundColor: "white",
-                    flex:1
-                }}
+                style={styles.container}
             >
                 <ScrollView
                     contentContainerStyle = {{
@@ -228,7 +225,7 @@ export default class SeriesDetailsScreen extends React.Component {
                                                         width: 1,
                                                         height: 12,
                                                         flex:0,
-                                                        backgroundColor: "#0005",
+                                                        backgroundColor: otherStyles.theme.colorThin,
                                                         marginHorizontal: 5,
                                                     }}
                                                 >
@@ -244,7 +241,7 @@ export default class SeriesDetailsScreen extends React.Component {
                             
                         </View>
                         <Text
-                            
+                            style={styles.textNormal}
                         >
                             { description }
                         </Text>
@@ -265,7 +262,7 @@ export default class SeriesDetailsScreen extends React.Component {
                         >
                             <Picker
                                 selectedValue={selectedSeason.url}
-                                style={{ height: 50, width: 150, flex:1 }}
+                                style={{ height: 50, width: 150, flex:1, color: otherStyles.theme.colorNormal }}
                                 onValueChange={(itemValue, itemIndex) => {
                                     this.openURL(itemValue);
                                 }}
