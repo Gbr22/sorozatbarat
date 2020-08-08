@@ -1,6 +1,6 @@
 
 import {UA, Login} from '../secret.json';
-import Cookie from 'react-native-cookie';
+import CookieManager from '@react-native-community/cookies';
 
 export function getUserAgent(){
     return UA;
@@ -78,7 +78,7 @@ export async function login(username,password){
         },
         body:jsonToQuery(data)
     }).then(r=>{
-        return Cookie.get("https://www.sorozatbarat.online/");
+        return CookieManager.get("https://www.sorozatbarat.online/");
     }).then(c=>{
         var loggedIn = c.member;
         if (loggedIn){
