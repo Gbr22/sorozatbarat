@@ -1,5 +1,5 @@
 
-import {UA, Login} from '../secret.json';
+import {UA} from '../secret.json';
 import CookieManager from '@react-native-community/cookies';
 
 export function getUserAgent(){
