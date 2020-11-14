@@ -71,6 +71,7 @@ export default class LinksScreen extends React.Component {
                                 <TouchableNativeFeedback
                                     key={e.title}
                                     onPress={()=>{
+                                        console.log("open",e);
                                         getPlayEndURL(
                                             referer,
                                             e.url

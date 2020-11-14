@@ -1,6 +1,7 @@
 
 import {UA} from '../secret.json';
 import CookieManager from '@react-native-community/cookies';
+import URL from 'url';
 
 export function getUserAgent(){
     return UA;
@@ -100,7 +101,17 @@ function urlToAbsolute(url){
     return url.replace(/^\//,URL_BASE_INDEX).replace(/^\/\//,"https://");
 }
 export function getPlayEndURL(referer,start){
-    return fetch(start, {
+    try {
+        var FILMORIAS_BASE = "https://www.filmorias.com/ugras-a-videohoz/";
+        var u = URL.parse(start);
+        var id = u.pathname.replace("/video/redirect/","");
+        var url = FILMORIAS_BASE+id;
+        return new Promise(r=>r(url));
+    } catch(err){
+        console.warn("end url err",err);
+    }
+    
+    /* return fetch(start, {
         redirect: "manual",
         headers:{
             "Referer":referer,
@@ -108,7 +119,7 @@ export function getPlayEndURL(referer,start){
         }
     }).then(r=>{
         return r.url;
-    })
+    }) */
 }
 
 
@@ -367,9 +378,9 @@ export function getHomePageText(){
 }
 export async function fetchMe(){
     return new Promise((resolve,reject)=>{
-        CookieManager.get(URL_BASE_INDEX).then(e=>{
+        /* CookieManager.get(URL_BASE_INDEX).then(e=>{
             console.log(e);
-        })
+        }) */
         getHomePageText().then(async (text)=>{
             let $ = cheerio.load(text);
             

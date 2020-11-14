@@ -65,7 +65,7 @@ class Home extends React.Component {
         var props = this.props;
         var statusbar = <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#0006" translucent = {true}/>;
 
-        console.log("data",data);
+        
         if (!data){
             return (<View style={styles.screenCont}></View>);
         }
