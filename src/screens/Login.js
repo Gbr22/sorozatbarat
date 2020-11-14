@@ -18,7 +18,7 @@ export default class LoginScreen extends React.Component {
 
   render(){
     let goHome = ()=>{
-        this.props.navigation.navigate("Home", {});
+        /* this.props.navigation.navigate("Home", {}); */
     }
 
     var {itemStyle, cont} = localstyles;
@@ -82,12 +82,15 @@ export default class LoginScreen extends React.Component {
                     <CustomButton title="Bejelentkezés" style={[itemStyle]}
                         onPress={()=>{
                             var {username, password} = this.state;
-                            
+                            console.log("logging in",username,password)
                             
                             login(username,password).then(()=>{
                                 fetchUserData(username).then(user=>{
-                                    update({user});
-                                    goHome();
+                                    if (user != null){
+                                        update({user, loggedIn:true});
+                                        goHome();
+                                    }
+                                    
                                 })
                                 
                                 

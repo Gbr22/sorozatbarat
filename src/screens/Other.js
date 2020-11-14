@@ -52,71 +52,45 @@ class Other extends React.Component {
       >
         <GlobalContext.Consumer>
           {({state, update}) => (
-            <Fragment>
-              {
-                state.user ?
-                <Fragment>
+           
+              <Fragment>
+                <View
+                  style={{
+                    justifyContent:"center",
+                    alignItems:"center",
+                  }}
+                >
                   <View
                     style={{
-                      justifyContent:"center",
-                      alignItems:"center",
+                      width: 120,
+                      height: 120,
+                      borderRadius: 30,
+                      overflow: "hidden"
                     }}
                   >
-                    <View
+                    <Image source={{uri:state.user.avatar}} 
                       style={{
-                        width: 120,
-                        height: 120,
-                        borderRadius: 30,
-                        overflow: "hidden"
+                        flex:1
                       }}
-                    >
-                      <Image source={{uri:state.user.avatar}} 
-                        style={{
-                          flex:1
-                        }}
-                      />
-                    </View>
-                    <Text style={styles.h1}>{state.user.username}</Text>
-                    <View
-                      style={{
-                        width: 120
-                      }}
-                    >
-                      <CustomButton title="Kijelentkezés"
-                        onPress={()=>{
-                          logout().then(()=>{
-                            update({user:null})
-                          })
-                        }}
-                      />
-                    </View>
+                    />
                   </View>
-                </Fragment> : 
-                
-                <Fragment>
+                  <Text style={styles.h1}>{state.user.username}</Text>
                   <View
                     style={{
-                      justifyContent:"center",
-                      alignItems:"center"
+                      width: 120
                     }}
                   >
-                    <Text style={styles.h1}>Nincs bejelentkezve</Text>
-                    <View
-                      style={{
-                        width: 120
+                    <CustomButton title="Kijelentkezés"
+                      onPress={()=>{
+                        logout().then(()=>{
+                          update({user:null,loggedIn:false})
+                        })
                       }}
-                    >
-                      
-                      <CustomButton title="Bejelentkezés"
-                        onPress={()=>{
-                          props.navigation.navigate("Login", {});
-                        }}
-                      />
-                    </View>
+                    />
                   </View>
-                </Fragment>
-              }
-            </Fragment>
+                </View>
+              </Fragment>
+              
           )}
         </GlobalContext.Consumer>
       </View>

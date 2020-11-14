@@ -6,6 +6,10 @@ export function getUserAgent(){
     return UA;
 }
 
+var HOST = "www.sorozatbarat.club";
+var URL_BASE = "https://www.sorozatbarat.club";
+var URL_BASE_INDEX = "https://www.sorozatbarat.club/";
+
 /* import cheerio from 'cheerio'; */
 import cheerio from 'cheerio-without-node-native';
 import { otherStyles } from '../styles';
@@ -21,14 +25,18 @@ export function getUser(){
 }
 
 export async function getHomePageData(forceRefresh = false){
-    if (!data.homepage || forceRefresh){
-        return fetchHomePageData().then((d)=>{
-            data.homepage = d;
-            return d;
-        })
-    } else {
-        return data.homepage;
-    }
+    return new Promise((resolve,reject)=>{
+        if (!data.homepage || forceRefresh){
+            fetchHomePageData().then((d)=>{
+                data.homepage = d;
+                resolve(d);
+            }).catch(err=>{
+                reject(err);
+            })
+        } else {
+            resolve(data.homepage);
+        }
+    })
 }
 
 
@@ -48,16 +56,15 @@ function chToChArr(c,$){
 }
 
 export async function logout(){
-    var url = "https://www.sorozatbarat.online/logout";
+    var url = URL_BASE+"/logout";
     return fetch(url);
 }
 export async function login(username,password){
-    var url = "https://www.sorozatbarat.online/login";
+    var url = URL_BASE+"/login";
     var data = {
         login:username,
         password,
         loginsubmit: "Belépés",
-        redirect:"/profile/"+username
     }
     function jsonToQuery(obj){
         var str = [];
@@ -78,7 +85,7 @@ export async function login(username,password){
         },
         body:jsonToQuery(data)
     }).then(r=>{
-        return CookieManager.get("https://www.sorozatbarat.online/");
+        return CookieManager.get(URL_BASE_INDEX);
     }).then(c=>{
         var loggedIn = c.member;
         if (loggedIn){
@@ -90,7 +97,7 @@ export async function login(username,password){
 }
 
 function urlToAbsolute(url){
-    return url.replace(/^\//,"https://www.sorozatbarat.online/").replace(/^\/\//,"https://");
+    return url.replace(/^\//,URL_BASE_INDEX).replace(/^\/\//,"https://");
 }
 export function getPlayEndURL(referer,start){
     return fetch(start, {
@@ -166,7 +173,7 @@ export async function getLinks(url){
     }
 }
 export async function getAutocomplete(search){
-    var url = "https://www.sorozatbarat.online/series/autocompleteV2?term="+escape(search);
+    var url = URL_BASE+"/series/autocompleteV2?term="+escape(search);
     return fetch(url, {
         headers: {
             "User-Agent":UA,
@@ -182,7 +189,6 @@ export async function getAutocomplete(search){
 
 }
 export async function getDetails(url){
-
     var response = await fetch(url, {
         headers: {
             "User-Agent":UA,
@@ -292,78 +298,99 @@ export async function getDetails(url){
     }
 }
 
-export async function fetchHomePageData(){
-    /* [...document.querySelectorAll(".thumbs")].map(e=>({e,children:e.querySelectorAll("ul li")})) */
-    var url = /* "http://www.xhaus.com/headers" */ "https://www.sorozatbarat.online/";
-    var text = await fetch(url, {
-        headers: {
-            "User-Agent":UA,
-        }
-    }).then(r=>r.text());
-
-
-    let $ = cheerio.load(text);
-    
-    var categories = chToArr($(".thumbs"));
-    categories = categories.map(e=>{
-        let o = {
-            e,
-            title:$(e).find("strong").text().replace(/\:$/,""),
-            children: chToArr($(e).find("ul li")),
-        }
-        function getImage(element){
-            var prop = element.css("background-image") || element.css("background");
-            return prop.match(/url\((.*)\)/)[1].replace(/(^[\'\"])|([\'\"])$/g,"").replace(/^\/\//,"https://");
-        }
-        o.items = o.children.map(c=>{
-            var anchor = $(c).find("a");
-            return {
-                title:$(c).text().trim(),
-                image: getImage(anchor),
-                url: anchor.attr("href").replace(/^\//,"https://www.sorozatbarat.online/")
+export function fetchHomePageData(){
+    return new Promise((resolve,reject)=>{
+        var url = URL_BASE_INDEX;
+        fetch(url, {
+            headers: {
+                "User-Agent":UA,
+            }
+        }).then(r=>{
+            if (r.url.indexOf("login") != -1){
+                reject("Not logged in");
+            } else {
+                r.text().then(text=>{
+                    let $ = cheerio.load(text);
+                    
+                    var categories = chToArr($(".thumbs"));
+                    categories = categories.map(e=>{
+                        let o = {
+                            e,
+                            title:$(e).find("strong").text().replace(/\:$/,""),
+                            children: chToArr($(e).find("ul li")),
+                        }
+                        function getImage(element){
+                            var prop = element.css("background-image") || element.css("background");
+                            return prop.match(/url\((.*)\)/)[1].replace(/(^[\'\"])|([\'\"])$/g,"").replace(/^\/\//,"https://");
+                        }
+                        o.items = o.children.map(c=>{
+                            var anchor = $(c).find("a");
+                            return {
+                                title:$(c).text().trim(),
+                                image: getImage(anchor),
+                                url: anchor.attr("href").replace(/^\//,URL_BASE_INDEX)
+                            }
+                        });
+                        return o;
+                    }).filter(e=>e.children.length > 0);
+                    
+                    var result = categories.map(e=>{
+                        return {
+                            title: e.title,
+                            data: e.items,
+                        }
+                    })
+                    resolve(result);
+                })
             }
         });
-        return o;
-    }).filter(e=>e.children.length > 0);
 
-    /* alert(categories[0].items[0].url); */
 
-    
-    var result = categories.map(e=>{
-        return {
-            title: e.title,
-            data: e.items,
-        }
     })
-    return result;
+    
+}
+export function getHomePageText(){
+    return new Promise((resolve,reject)=>{
+        var url = URL_BASE_INDEX;
+        fetch(url, {
+            headers: {
+                "User-Agent":UA,
+            }
+        }).then(r=>{
+            if (r.url.indexOf("login") != -1){
+                reject("Not logged in");
+            } else {
+                resolve(r.text());
+            }
+        });
+    });
 }
 export async function fetchMe(){
-    var url = /* "http://www.xhaus.com/headers" */ "https://www.sorozatbarat.online/";
-    var text = await fetch(url, {
-        headers: {
-            "User-Agent":UA,
-        }
-    }).then(r=>r.text());
+    return new Promise((resolve,reject)=>{
+        CookieManager.get(URL_BASE_INDEX).then(e=>{
+            console.log(e);
+        })
+        getHomePageText().then(async (text)=>{
+            let $ = cheerio.load(text);
+            
+            var user = null;
+            $(".user #account").remove();
+            $(".user p *").remove();
 
-
-    let $ = cheerio.load(text);
-
-    var isLoggedIn = $(".user").text().indexOf("Belépés") == -1;
-
-    var user = null;
-    if (isLoggedIn){
-        $(".user #account").remove();
-        $(".user p *").remove();
-
-        var username = $(".user p").text().trim();
-        user = await fetchUserData(username);
-    }
-    return user;
+            var username = $(".user p").text().trim();
+            console.log("username",username);
+            user = await fetchUserData(username);
+            resolve(user);
+        }).catch(err=>{
+            reject(err);
+            return;
+        })
+    })
 }
 
 
 export async function fetchUserData(username){
-    var url = "https://www.sorozatbarat.online/profile/"+username;
+    var url = URL_BASE+"/profile/"+username;
     var text = await fetch(url, {
         headers: {
             "User-Agent":UA,

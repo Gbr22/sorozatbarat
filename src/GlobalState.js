@@ -2,7 +2,8 @@ import React from 'react';
 import { getMe, fetchMe } from './logic/data';
 
 export const initialGlobalState = {
-    user:null
+    user:null,
+    loggedIn:null
 };
 
 var _update;
@@ -14,7 +15,13 @@ export function UpdateGlobalState(){
 }
 export function AppMouted(){
     fetchMe().then(user=>{
-        UpdateGlobalState({user});
+        console.log("user",user);
+        if (user){
+            UpdateGlobalState({user, loggedIn:true});
+        }
+    }).catch(err=>{
+        console.log("user err",err);
+        UpdateGlobalState({loggedIn:false});
     })
 }
 

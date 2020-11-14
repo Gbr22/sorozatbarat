@@ -19,6 +19,7 @@ import TouchFeedback from './src/components/TouchFeedback';
 import { otherStyles } from './src/styles';
 import SearchScreen from './src/screens/Search';
 import { GlobalContext, initialGlobalState, setUpdate, AppMouted } from './src/GlobalState';
+import LoginScreen from './src/screens/Login';
 
 
 export default class App extends React.Component {
@@ -27,7 +28,9 @@ export default class App extends React.Component {
     setUpdate((o)=>{
       this.update(o);
     });
+    
     AppMouted();
+    console.log("App mounted");
   }
   update(o){
     this.setState(o);
@@ -37,17 +40,30 @@ export default class App extends React.Component {
     return (
       <GlobalContext.Provider value={{state:this.state, update:(o)=>{this.update(o)}}}>
       
-      <NavigationContainer>
-        
-        <Tab.Navigator
-          tabBar = {props => <MyTabBar {...props} />}
-        >
-          <Tab.Screen options={{ title:"Kezdőlap" }} name="Home" component={HomeScreen} />
-          <Tab.Screen options={{ title:"Search" }} name="Search" component={SearchScreen} />
-          <Tab.Screen options={{ title:"Fiók" }} name="Other" component={OtherScreen} />
-        </Tab.Navigator>
-        
-      </NavigationContainer>
+        <GlobalContext.Consumer>
+            {({state, update}) => {
+              if (state.loggedIn === true){
+                return (
+                  <NavigationContainer>
+                
+                    <Tab.Navigator
+                      tabBar = {props => <MyTabBar {...props} />}
+                    >
+                      <Tab.Screen options={{ title:"Kezdőlap" }} name="Home" component={HomeScreen} />
+                      <Tab.Screen options={{ title:"Keresés" }} name="Search" component={SearchScreen} />
+                      <Tab.Screen options={{ title:"Fiók" }} name="Other" component={OtherScreen} />
+                    </Tab.Navigator>
+                    
+                  </NavigationContainer>
+                );
+              } else if (state.loggedIn === false){
+                return <LoginScreen></LoginScreen>
+              } else {
+                return (<View></View>);
+              }
+            }}
+        </GlobalContext.Consumer>
+      
 
       </GlobalContext.Provider>
     );

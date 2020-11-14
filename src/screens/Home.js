@@ -36,6 +36,8 @@ class Home extends React.Component {
                 homepageData:d,
             });
             return d;
+        }).catch(err=>{
+            
         })
     }
     componentDidMount() {
@@ -59,14 +61,15 @@ class Home extends React.Component {
     }
   
     render(){
-
         var data = this.state.homepageData;
         var props = this.props;
         var statusbar = <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#0006" translucent = {true}/>;
 
+        console.log("data",data);
         if (!data){
             return (<View style={styles.screenCont}></View>);
         }
+        
 
         return (
             <View style={styles.screenCont}>
@@ -174,5 +177,7 @@ class Home extends React.Component {
                 
             </View>
         );
+            
+        
     }
 }
