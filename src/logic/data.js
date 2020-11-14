@@ -98,6 +98,9 @@ export async function login(username,password){
 }
 
 function urlToAbsolute(url){
+    if (url.indexOf("//") == 0){
+        return url.replace("//","https://");
+    }
     return url.replace(/^\//,URL_BASE_INDEX).replace(/^\/\//,"https://");
 }
 export function getPlayEndURL(referer,start){
@@ -161,8 +164,12 @@ export async function getLinks(url){
                 title:row[1].text().trim().split("Feltöltő:")[0].trim(),
                 uploader: uploaderURL ? {
                     url:uploaderURL ? urlToAbsolute(uploaderURL) : null,
-                    username:row[1].find("a").text().trim()
+                    username:row[1].find("a").text().trim(),
                 } : null,
+                lang:{
+                    flag:urlToAbsolute(row[0].find("img.flags").attr("src")),
+                    title:row[0].find("img.flags").attr("title"),
+                },
                 viewcount:row[2].text().trim(),
                 url:urlToAbsolute(links[links.length-1].attr("href")),
             };

@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Fragment } from 'react';
-import { StyleSheet, Text, View, Image, Picker, Linking } from 'react-native';
+import { StyleSheet, Text, View, Image, Picker, Linking, ToastAndroid } from 'react-native';
 import { getHomePageData, getDetails, getUserAgent, getLinks, getPlayEndURL } from '../logic/data';
 import styles, { otherStyles } from '../styles';
 import { FlatList, ScrollView, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback, TouchableNativeFeedback } from 'react-native-gesture-handler';
@@ -67,18 +67,19 @@ export default class LinksScreen extends React.Component {
                     </View>
                     {
                         items.map(e=>{
+                            console.log(e);
+                            function openLink(){
+                                getPlayEndURL(
+                                    referer,
+                                    e.url
+                                ).then(url=>{
+                                    Linking.openURL(url).catch(err => {});
+                                })
+                            }
                             return (
                                 <TouchableNativeFeedback
                                     key={e.title}
-                                    onPress={()=>{
-                                        console.log("open",e);
-                                        getPlayEndURL(
-                                            referer,
-                                            e.url
-                                        ).then(url=>{
-                                            Linking.openURL(url).catch(err => {});
-                                        })
-                                    }}
+                                    onPress={()=>{}}
                                     style={{
                                         paddingVertical: 10,
                                         paddingHorizontal: 20
@@ -91,10 +92,43 @@ export default class LinksScreen extends React.Component {
                                     >
                                         <View
                                             style={{
-                                                flex:1
+                                                flexDirection: "column",
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                                marginRight: 8,
                                             }}
                                         >
-                                            <Text>{e.title}</Text>
+                                            <TouchableWithoutFeedback
+                                                onPress={()=>{
+                                                    Platform.select({
+                                                        android:(t)=>{
+                                                            ToastAndroid.show(t,ToastAndroid.SHORT);
+                                                        },
+                                                        default:alert
+                                                    })(e.lang.title);
+                                                }}
+                                            >
+                                                <Image
+                                                    style={{
+                                                        width: 25,
+                                                        height: 20,
+                                                        resizeMode: "contain",
+                                                    }}
+                                                    source={{uri:e.lang.flag}}
+                                                />
+                                            </TouchableWithoutFeedback>
+                                        </View>
+                                        
+                                        <View
+                                            style={{
+                                                flex:1,
+                                            }}
+                                        >
+                                            <TouchableWithoutFeedback
+                                                onPress={openLink}
+                                            >
+                                                <Text>{e.title}</Text>
+                                            </TouchableWithoutFeedback>
                                             { e.uploader ? (
                                                 <View
                                                     style={{
@@ -112,11 +146,14 @@ export default class LinksScreen extends React.Component {
                                                 </View>
                                             ) : null }
                                         </View>
-                                        <View>
+                                        <TouchableWithoutFeedback
+                                            
+                                            onPress={openLink}
+                                        >
                                             <Text>
                                                 {e.viewcount}
                                             </Text>
-                                        </View>
+                                        </TouchableWithoutFeedback>
                                     </View>
                                 </TouchableNativeFeedback>
                             )
