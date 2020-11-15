@@ -63,3 +63,7 @@ buck-out/
 web-build/
 
 secret.*
+
+# Generated Icons
+icon/icon.png
+android/app/src/main/res/mipmap-*
