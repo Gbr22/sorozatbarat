@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 
 import { StyleSheet, View, Text, TouchableOpacity,TouchableNativeFeedback, SafeAreaView, Platform } from 'react-native';
-
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -25,6 +25,7 @@ import LoginScreen from './src/screens/Login';
 export default class App extends React.Component {
   state=Object.assign({},initialGlobalState);
   componentDidMount(){
+    
     setUpdate((o)=>{
       this.update(o);
     });
@@ -38,23 +39,33 @@ export default class App extends React.Component {
   render(){
 
     return (
+      <SafeAreaProvider
+        style={{
+          flex:1
+        }}
+      >
       <GlobalContext.Provider value={{state:this.state, update:(o)=>{this.update(o)}}}>
       
         <GlobalContext.Consumer>
             {({state, update}) => {
               if (state.loggedIn === true){
                 return (
-                  <NavigationContainer>
-                
-                    <Tab.Navigator
-                      tabBar = {props => <MyTabBar {...props} />}
-                    >
-                      <Tab.Screen options={{ title:"Kezdőlap" }} name="Home" component={HomeScreen} />
-                      <Tab.Screen options={{ title:"Keresés" }} name="Search" component={SearchScreen} />
-                      <Tab.Screen options={{ title:"Fiók" }} name="Other" component={OtherScreen} />
-                    </Tab.Navigator>
+                 
+                    <NavigationContainer>
+                      
+                      <Tab.Navigator
+                        initialRouteName="Home"
+                        tabBar = {props => <MyTabBar {...props} />}
+                        forceInset={{top:'always'}}
+                      >
+                        <Tab.Screen options={{ title:"Kezdőlap" }} name="Home" component={HomeScreen} />
+                        <Tab.Screen options={{ title:"Keresés" }} name="Search" component={SearchScreen} />
+                        <Tab.Screen options={{ title:"Fiók" }} name="Other" component={OtherScreen} />
+                      </Tab.Navigator>
                     
-                  </NavigationContainer>
+                      
+                    </NavigationContainer>
+                  
                 );
               } else if (state.loggedIn === false){
                 return <LoginScreen></LoginScreen>
@@ -66,6 +77,7 @@ export default class App extends React.Component {
       
 
       </GlobalContext.Provider>
+      </SafeAreaProvider>
     );
   }
 }
