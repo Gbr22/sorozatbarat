@@ -1,10 +1,22 @@
 
-import {UA} from '../secret.json';
 import CookieManager from '@react-native-community/cookies';
 import URL from 'url';
+import UserAgent from 'react-native-user-agent';
 
-export function getUserAgent(){
-    return UA;
+var UA = "";
+export function getUA(params) {
+    return new Promise((resolve,reject)=>{
+        UserAgent.getWebViewUserAgent()
+        .then(s => {
+            UA = s;
+            console.log("User Agent: ", UA);
+            resolve();
+        })
+        .catch(e => {
+            console.log("User Agent: ", UA);
+            resolve();
+        })
+    })
 }
 
 var HOST = "www.sorozatbarat.club";

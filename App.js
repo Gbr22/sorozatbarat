@@ -20,6 +20,7 @@ import { otherStyles } from './src/styles';
 import SearchScreen from './src/screens/Search';
 import { GlobalContext, initialGlobalState, setUpdate, AppMouted } from './src/GlobalState';
 import LoginScreen from './src/screens/Login';
+import { getUA } from './src/logic/data';
 
 
 export default class App extends React.Component {
@@ -30,7 +31,9 @@ export default class App extends React.Component {
       this.update(o);
     });
     
-    AppMouted();
+    getUA().then(()=>{
+      AppMouted();
+    })
     console.log("App mounted");
   }
   update(o){
