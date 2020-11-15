@@ -105,10 +105,7 @@ export default class SeriesDetailsScreen extends React.Component {
         return (
             
             <View
-                style={{
-                    backgroundColor: "white",
-                    flex:1
-                }}
+                style={styles.container}
             >
                 <ScrollView
                     contentContainerStyle = {{
@@ -228,7 +225,7 @@ export default class SeriesDetailsScreen extends React.Component {
                                                         width: 1,
                                                         height: 12,
                                                         flex:0,
-                                                        backgroundColor: "#0005",
+                                                        backgroundColor: otherStyles.colors.divider,
                                                         marginHorizontal: 5,
                                                     }}
                                                 >
@@ -244,7 +241,7 @@ export default class SeriesDetailsScreen extends React.Component {
                             
                         </View>
                         <Text
-                            
+                            style={{color: styles.textSmall.color}}
                         >
                             { description }
                         </Text>
@@ -265,11 +262,12 @@ export default class SeriesDetailsScreen extends React.Component {
                         >
                             <Picker
                                 selectedValue={selectedSeason.url}
-                                style={{ height: 50, width: 150, flex:1 }}
+                                style={{ height: 50, width: 150, flex:1, color:styles.textNormal.color }}
                                 onValueChange={(itemValue, itemIndex) => {
                                     this.openURL(itemValue);
                                 }}
                                 mode="dialog"
+                                
                             >
                                 {
                                     seasons.map((e,i)=>{
@@ -349,7 +347,7 @@ export default class SeriesDetailsScreen extends React.Component {
                                                 style={{
                                                     
                                                     paddingHorizontal: 20,
-                                                    backgroundColor: "white",
+                                                    
                                                     borderRadius: 12,
                                                     /* borderWidth: 1,
                                                     borderColor: "#e6e6e6", */
@@ -373,7 +371,7 @@ export default class SeriesDetailsScreen extends React.Component {
                                                     >
                                                         <Text
                                                             style={{
-                                                                
+                                                                color: styles.textNormal.color
                                                             }}
                                                         >
                                                             {e.title}

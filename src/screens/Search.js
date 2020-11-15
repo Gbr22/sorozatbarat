@@ -9,18 +9,14 @@ import BouncePress from '../components/BouncePress';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SeriesDetailsScreen from './SeriesDetails';
-import getStackItems from '../components/StackItems';
+import getStackItems, {getNavigator} from '../components/StackItems';
 
 
 const Stack = createStackNavigator();
 
+
 export default function SearchScreen(props){
-    return (
-        <Stack.Navigator initialRouteName="Home">
-            <Stack.Screen name="Home" component={Search} options={{ title:"Keresés" }}/>
-            { getStackItems(Stack) }
-        </Stack.Navigator>
-    );
+    return getNavigator(Stack,Search,"Keresés");
 }
 class Search extends React.Component {
     state = {
@@ -78,22 +74,25 @@ class Search extends React.Component {
                         <TextInput
 
                             ref={r=>this.searchBox = r}
+
+                            placeholderTextColor={styles.textSmall.color}
                             style={{
                                 height: 40,
                                 borderRadius: 15,
                                 margin: 20,
                                 marginTop: 20,
-                                /* borderWidth: 1,
-                                borderColor: "#cccccc", */
+                                borderWidth: 1,
+                                borderColor: otherStyles.colors.divider,
                                 paddingHorizontal: 20,
 
-                                shadowColor: "#000",
+                                color: styles.text.color,
+                                /* shadowColor: "red",
                                 shadowOffset: {
                                     width: 0,
                                     height: 1,
                                 },
                                 shadowOpacity: 0.22,
-                                shadowRadius: 2.22,
+                                shadowRadius: 2.22, */
 
                                 elevation: 1,
                             }}
@@ -128,7 +127,11 @@ class Search extends React.Component {
                                             paddingVertical: 8
                                         }}
                                     >
-                                        <Text>{e.label}</Text>
+                                        <Text
+                                            style={{
+                                                color: styles.text.color,
+                                            }}
+                                        >{e.label}</Text>
                                     </View>
                                 </TouchFeedback>
                             );

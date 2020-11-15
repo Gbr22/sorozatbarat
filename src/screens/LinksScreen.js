@@ -127,7 +127,9 @@ export default class LinksScreen extends React.Component {
                                             <TouchableWithoutFeedback
                                                 onPress={openLink}
                                             >
-                                                <Text>{e.title}</Text>
+                                                <Text
+                                                    style={{color:styles.textNormal.color}}
+                                                >{e.title}</Text>
                                             </TouchableWithoutFeedback>
                                             { e.uploader ? (
                                                 <View
@@ -135,7 +137,9 @@ export default class LinksScreen extends React.Component {
                                                         flexDirection:"row",
                                                     }}
                                                 >
-                                                    <Text>Feltöltő: </Text>
+                                                    <Text
+                                                        style={{color:styles.textSmall.color}}
+                                                    >Feltöltő: </Text>
                                                     <TouchableOpacity
                                                         onPress={()=>{
 
@@ -150,7 +154,9 @@ export default class LinksScreen extends React.Component {
                                             
                                             onPress={openLink}
                                         >
-                                            <Text>
+                                            <Text
+                                                style={{color:styles.textNormal.color}}
+                                            >
                                                 {e.viewcount}
                                             </Text>
                                         </TouchableWithoutFeedback>

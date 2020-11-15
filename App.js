@@ -16,12 +16,11 @@ import { Feather } from '@expo/vector-icons';
 import { TouchableWithoutFeedback, TouchableHighlight } from 'react-native-gesture-handler';
 
 import TouchFeedback from './src/components/TouchFeedback';
-import { otherStyles } from './src/styles';
+import styles, { otherStyles } from './src/styles';
 import SearchScreen from './src/screens/Search';
 import { GlobalContext, initialGlobalState, setUpdate, AppMouted } from './src/GlobalState';
 import LoginScreen from './src/screens/Login';
 import { getUA } from './src/logic/data';
-
 
 export default class App extends React.Component {
   state=Object.assign({},initialGlobalState);
@@ -60,6 +59,9 @@ export default class App extends React.Component {
                         initialRouteName="Home"
                         tabBar = {props => <MyTabBar {...props} />}
                         forceInset={{top:'always'}}
+                        screenOptions={{
+                          
+                        }}
                       >
                         <Tab.Screen options={{ title:"Kezdőlap" }} name="Home" component={HomeScreen} />
                         <Tab.Screen options={{ title:"Keresés" }} name="Search" component={SearchScreen} />
@@ -108,7 +110,7 @@ function MyTabBar({ state, descriptors, navigation }) {
         
         elevation: 5,
         // background color must be set
-        backgroundColor : "#fff" // invisible color
+        backgroundColor: otherStyles.theme.backgroundColor
       }}
     >
       {state.routes.map((route, index) => {
@@ -146,7 +148,7 @@ function MyTabBar({ state, descriptors, navigation }) {
           "Search":"search"
         })[route.name];
 
-        var color = isFocused ? otherStyles.colors.theme : '#4f4f4f';
+        var color = isFocused ? otherStyles.colors.theme : otherStyles.theme.text.nav;
         var iconSize = 25;
 
         return (

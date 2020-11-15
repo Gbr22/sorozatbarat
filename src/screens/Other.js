@@ -7,17 +7,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import CustomButton from '../components/CustomButton';
 import { getUser, getMe, logout } from '../logic/data';
 import { GlobalContext } from '../GlobalState'
+import { getNavigator } from '../components/StackItems';
 
 const Stack = createStackNavigator();
 
 export default function OtherScreen() {
-    return (
-      <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={Other} options={{ title:"Fiók" }}/>
-          { getStackItems(Stack) }
-      </Stack.Navigator>
-      
-    );
+  return getNavigator(Stack,Other,"Fiók");
 }
 
 

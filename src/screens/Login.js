@@ -55,7 +55,7 @@ export default class LoginScreen extends React.Component {
                         style={[
                             localstyles.title,
                             {
-                                color: "#1a1a1a"
+                                color: styles.h1.color
                             }
                         ]}
                     >Sorozat</Text>

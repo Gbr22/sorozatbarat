@@ -9,7 +9,7 @@ import BouncePress from '../components/BouncePress';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SeriesDetailsScreen from './SeriesDetails';
-import getStackItems from '../components/StackItems';
+import getStackItems, { getNavigator } from '../components/StackItems';
 import CustomButton from '../components/CustomButton';
 import { GlobalContext } from '../GlobalState';
 
@@ -17,12 +17,7 @@ import { GlobalContext } from '../GlobalState';
 const Stack = createStackNavigator();
 
 export default function HomeScreen(props){
-    return (
-        <Stack.Navigator initialRouteName="Home">
-            <Stack.Screen name="Home" component={Home} options={{ title:"Kezdőlap" }}/>
-            { getStackItems(Stack) }
-        </Stack.Navigator>
-    );
+    return getNavigator(Stack,Home,"Kezdőlap");
 }
 class Home extends React.Component {
     state = {
@@ -70,7 +65,7 @@ class Home extends React.Component {
                 
                 <ScrollView style={styles.screenScroll}
                     refreshControl={
-                        <RefreshControl refreshing={this.state.refreshing} onRefresh={()=>{this.onRefresh()}} />
+                        <RefreshControl progressBackgroundColor={otherStyles.theme.refreshColor} colors={[otherStyles.colors.color]} refreshing={this.state.refreshing} onRefresh={()=>{this.onRefresh()}} />
                     }
                 >
                 {
@@ -94,6 +89,7 @@ class Home extends React.Component {
                                             <View
                                                 style={{
                                                     /* backgroundColor: "#EEE", */
+                                                    
                                                     flex: 1,
                                                     width: imgWidth + 2*cardPadding,
                                                     marginHorizontal: 3,
@@ -126,7 +122,9 @@ class Home extends React.Component {
                                                         paddingTop:5,
                                                     }}
                                                 >
-                                                    <Text>{item.title}</Text>
+                                                    <Text
+                                                        style={{color: styles.textNormal.color}}
+                                                    >{item.title}</Text>
                                                 </View>
 
                                             </View>
@@ -140,6 +138,7 @@ class Home extends React.Component {
                                 <Fragment key={category.title}>
                                     <View
                                         style={{
+                                            color: styles.h1.color,
                                             height: 290,
                                         }}
                                     >

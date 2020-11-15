@@ -4,6 +4,9 @@ import URL from 'url';
 import UserAgent from 'react-native-user-agent';
 
 var UA = "";
+export function getUserAgent(){
+    return UA;
+}
 export function getUA(params) {
     return new Promise((resolve,reject)=>{
         UserAgent.getWebViewUserAgent()

@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, Button } from 'react-native';
-import styles from '../styles';
+import styles, { otherStyles } from '../styles';
 import TouchFeedback from './TouchFeedback';
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 
@@ -21,7 +21,7 @@ export default class CustomButton extends React.Component {
                         paddingVertical: 10,
                     }
                 ]}
-                background={TouchableNativeFeedback.Ripple('rgba(255, 255, 255, 0.5)', false)}
+                background={TouchableNativeFeedback.Ripple(otherStyles.theme.ripple, false)}
             >
                 <Text
                     style={{
