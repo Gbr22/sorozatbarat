@@ -315,6 +315,11 @@ export async function getDetails(url){
     description = infoTable.find(".tags").parent().find("p:not(.tags)").text().trim();
     
     
+    var originalTitle = title?.match(/ {0,1}\((.*?)\)/g)?.[0];
+    if (originalTitle){
+        title = title.replace(originalTitle,"");
+        originalTitle = originalTitle.replace(" (","").replace(")","");
+    }
     
     
     return {
@@ -323,6 +328,7 @@ export async function getDetails(url){
         seasons,
         episodes,
         title,
+        originalTitle,
         image,
         year,
         length,
@@ -346,6 +352,15 @@ export function fetchHomePageData(){
                     let $ = cheerio.load(text);
                     
                     var categories = chToArr($(".thumbs"));
+                    var spotlight = chToArr($("ul.haxordion li"));
+                    spotlight = spotlight.map(e=>{
+                        
+                        return {
+                            image:urlToAbsolute($(e).find("img").attr("src")),
+                            url:urlToAbsolute($(e).find(".overlay a").first().attr("href")),
+                            title:urlToAbsolute($(e).find(".overlay a").first().text().trim()),
+                        }
+                    })
                     categories = categories.map(e=>{
                         let o = {
                             e,
@@ -367,12 +382,15 @@ export function fetchHomePageData(){
                         return o;
                     }).filter(e=>e.children.length > 0);
                     
-                    var result = categories.map(e=>{
-                        return {
-                            title: e.title,
-                            data: e.items,
-                        }
-                    })
+                    var result = {
+                        spotlight,
+                        categories:categories.map(e=>{
+                            return {
+                                title: e.title,
+                                data: e.items,
+                            }
+                        }),
+                    }
                     resolve(result);
                 })
             }

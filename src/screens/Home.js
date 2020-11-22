@@ -71,7 +71,90 @@ class Home extends React.Component {
                 {
                     data != null ?
                     <Fragment>
-                        {data.map(category=>{
+                        <View
+                            style={{
+                                color: styles.h1.color,
+                                height: 290,
+                            }}
+                        >
+                            <Text
+                                style={[
+                                    styles.h1,
+                                    {
+                                        paddingHorizontal: otherStyles.screenPaddingHorizontal
+                                    }
+                                ]}
+                            >{"Kiemeltek"}</Text>
+                            <FlatList
+                                data={data.spotlight}
+                                renderItem={({item})=>{
+                                    var imageRatio = 516/290;
+                                    var imgHeight = 280 - 110;
+                                    var imgWidth = imgHeight * imageRatio;
+                                    var cardPadding = 8;
+                                    return (
+                                        <BouncePress
+                                            onPress={()=>{
+                                                props.navigation.navigate("Details", {
+                                                    series: item,
+                                                });
+                                            }}
+                                        >
+                                            <View
+                                                style={{
+                                                    /* backgroundColor: "#EEE", */
+                                                    
+                                                    flex: 1,
+                                                    width: imgWidth + 2*cardPadding,
+                                                    marginHorizontal: 3,
+                                                    padding: cardPadding,
+                                                    borderRadius: 8,
+                                                    alignItems: "center"
+                                                }}
+                                            >
+                                                <View
+                                                    style={{
+                                                        height: imgHeight,
+                                                        width: imgWidth,
+                                                        overflow: "hidden"
+                                                    }}
+                                                >
+                                                    <Image source={{uri:item.image}} 
+                                                        style={{
+                                                            flex: 1,
+                                                            borderRadius: 4
+                                                        }}
+                                                        resizeMode="contain"
+                                                    />
+                                                </View>
+                                                <View
+                                                    style={{
+                                                        
+                                                        flex: 1,
+                                                        justifyContent: "flex-start",
+                                                        alignItems: "center",
+                                                        paddingTop:5,
+                                                    }}
+                                                >
+                                                    <Text
+                                                        style={{color: styles.textNormal.color}}
+                                                    >{item.title}</Text>
+                                                </View>
+
+                                            </View>
+                                        </BouncePress>
+                                    );
+                                }}
+                                keyExtractor={item => item.title}
+                                horizontal={true}
+                                style={{
+                                    /* paddingLeft: otherStyles.screenPaddingHorizontal */
+                                    
+                                }}
+                            >
+                            </FlatList>
+                        </View>
+                        {data.categories.map(category=>{
                             function renderItem({item}){
                                 var imageRatio = 136/200;
                                 var imgHeight = 280 - 110;

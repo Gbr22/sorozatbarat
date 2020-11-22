@@ -164,6 +164,17 @@ export default class SeriesDetailsScreen extends React.Component {
                                     >
                                         {item.title}
                                     </Text>
+                                    {item.originalTitle ? <Text
+                                        style={[
+                                            styles.textSmall,
+                                            {
+                                                fontSize: 20,
+                                                fontStyle: "italic",
+                                            }
+                                        ]}
+                                    >
+                                        {"("+item.originalTitle+")"}
+                                    </Text> : null}
                                     <Text
                                         style={[
                                             styles.textSmall,
