@@ -118,6 +118,44 @@ function urlToAbsolute(url){
     }
     return url.replace(/^\//,URL_BASE_INDEX).replace(/^\/\//,"https://");
 }
+export function formURLencode(data){
+    const formBody = Object.keys(data).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])).join('&');
+    return formBody;
+}
+export function getDownloadURL(dlurl){
+    return fetch(dlurl,{
+        headers: {
+            "User-Agent":UA,
+        }
+    }).then(r=>r.text()).then(html=>{
+        let $ = cheerio.load(html);
+        var pm = $("puremotion");
+        var token = pm.attr("data-token");
+        var url = pm.attr("data-url");
+        return fetch(url,{
+            headers: {
+                "User-Agent":UA,
+            }
+        }).then(r=>r.text()).then(embedhtml=>{
+            var PUREMOTION_API = "https://www.thepuremotion.com/api.php";
+            
+            return fetch(PUREMOTION_API, {
+                method: 'POST',
+                headers: {
+                    "User-Agent":UA,
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    "Origin":"chrome-extension://jmkaieepcjnofkicafdelmdpigjdankd",
+                },
+                body: formURLencode({
+                    token,
+                    url,
+                    d:"www.filmorias.com",
+                    html:embedhtml
+                })
+            }).then(r=>r.json())
+        })
+    })
+}
 export function getPlayEndURL(referer,start){
     try {
         var FILMORIAS_BASE = "https://www.filmorias.com/ugras-a-videohoz/";

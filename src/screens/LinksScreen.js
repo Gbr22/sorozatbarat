@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Fragment } from 'react';
 import { StyleSheet, Text, View, Image, Picker, Linking, ToastAndroid } from 'react-native';
-import { getHomePageData, getDetails, getUserAgent, getLinks, getPlayEndURL } from '../logic/data';
+import { getHomePageData, getDetails, getUserAgent, getLinks, getPlayEndURL, getDownloadURL } from '../logic/data';
 import styles, { otherStyles } from '../styles';
 import { FlatList, ScrollView, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback, TouchableNativeFeedback } from 'react-native-gesture-handler';
 import TouchFeedback from '../components/TouchFeedback';
@@ -67,13 +67,17 @@ export default class LinksScreen extends React.Component {
                     </View>
                     {
                         items.map(e=>{
-                            console.log(e);
+                            
                             function openLink(){
                                 getPlayEndURL(
                                     referer,
                                     e.url
                                 ).then(url=>{
-                                    Linking.openURL(url).catch(err => {});
+                                    getDownloadURL(url).then(json=>{
+                                        console.log("download",json);
+                                        Linking.openURL(json.videoUrl).catch(err => {});
+                                    })
+                                    
                                 })
                             }
                             return (
