@@ -10,6 +10,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Feather } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons'; 
+import { playVideo } from '../logic/util';
 
 
 export default class LinksScreen extends React.Component {
@@ -74,8 +75,13 @@ export default class LinksScreen extends React.Component {
                                     e.url
                                 ).then(url=>{
                                     getDownloadURL(url).then(json=>{
-                                        console.log("download",json);
-                                        Linking.openURL(json.videoUrl).catch(err => {});
+                                        playVideo(json.videoUrl,json.subtitles[0]?.url);
+                                    }).catch(err=>{
+                                        var msg = err.message;
+                                        if (err.message == "Missing video url"){
+                                            msg = "Hiba, url nem található! Valószínúleg a videót törölték";
+                                        }
+                                        ToastAndroid.show(msg,ToastAndroid.LONG);
                                     })
                                     
                                 })

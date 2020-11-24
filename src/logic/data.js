@@ -132,6 +132,7 @@ export function getDownloadURL(dlurl){
         var pm = $("puremotion");
         var token = pm.attr("data-token");
         var url = pm.attr("data-url");
+        var subtitles = JSON.parse(pm.attr("data-subtitle") || "[]");
         return fetch(url,{
             headers: {
                 "User-Agent":UA,
@@ -152,7 +153,16 @@ export function getDownloadURL(dlurl){
                     d:"www.filmorias.com",
                     html:embedhtml
                 })
-            }).then(r=>r.json())
+            }).then(r=>r.json()).then(json=>{
+                console.log("download",json,subtitles);
+                if (json.status == "error"){
+                    throw new Error(json.message);
+                }
+                return {
+                    videoUrl:json.videoUrl,
+                    subtitles,
+                };
+            })
         })
     })
 }
