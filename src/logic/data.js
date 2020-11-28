@@ -254,7 +254,10 @@ export async function getLinks(url){
     }
 }
 export async function getAutocomplete(search){
-    var url = URL_BASE+"/series/autocompleteV2?term="+escape(search);
+    var normalized = search.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    console.log("escaped",normalized);
+    var url = URL_BASE+"/series/autocompleteV2?term="+escape(normalized);
+    console.log("search query",url);
     return fetch(url, {
         headers: {
             "User-Agent":UA,

@@ -21,11 +21,7 @@ export default function SearchScreen(props){
 class Search extends React.Component {
     state = {
         query:"",
-        results:[/* {
-            "label": "Rick és Morty (Rick and Morty)",
-            "value": "Rick és Morty",
-            "url": "https://www.sorozatbarat.online/video/series/2195/Rick_es_Morty_online_sorozat"
-        } */]
+        results:null
     };
     
     searchBox;
@@ -69,7 +65,7 @@ class Search extends React.Component {
 
         return (
             <View style={styles.screenCont}>
-                <ScrollView style={styles.screenScroll}>
+                <View style={styles.screenScroll}>
                     <View>
                         <TextInput
 
@@ -112,32 +108,51 @@ class Search extends React.Component {
                         />
                     </View>
                     {
-                        this.state.results.map(e=>{
-                            return (
-                                <TouchFeedback key={e.url}
-                                    onPress={()=>{
-                                        props.navigation.navigate("Details", {
-                                            series: {url:e.url},
-                                        });
+                        this.state.results != null ?
+                            this.state.results.length > 0 ? 
+                                <FlatList
+                                    data={this.state.results}
+                                    renderItem={({item})=>{
+                                        var e = item;
+                                        return (
+                                            <TouchFeedback key={e.url}
+                                                onPress={()=>{
+                                                    props.navigation.navigate("Details", {
+                                                        series: {url:e.url},
+                                                    });
+                                                }}
+                                            >
+                                                <View
+                                                    style={{
+                                                        paddingHorizontal:30,
+                                                        paddingVertical: 8
+                                                    }}
+                                                >
+                                                    <Text
+                                                        style={{
+                                                            color: styles.text.color,
+                                                        }}
+                                                    >{e.label}</Text>
+                                                </View>
+                                            </TouchFeedback>
+                                        )
+                                    }}
+                                    keyExtractor={item => item.url}
+                                    horizontal={false}
+                                    style={{
+
                                     }}
                                 >
-                                    <View
-                                        style={{
-                                            paddingHorizontal:30,
-                                            paddingVertical: 8
-                                        }}
-                                    >
-                                        <Text
-                                            style={{
-                                                color: styles.text.color,
-                                            }}
-                                        >{e.label}</Text>
-                                    </View>
-                                </TouchFeedback>
-                            );
-                        })
+                                </FlatList>
+                                : <View style={{
+                                    justifyContent:"center",
+                                    alignItems:"center"
+                                  }}>
+                                    <Text style={styles.textNormal}>Nincs találat</Text>
+                                </View>
+                            : <Fragment></Fragment>
                     }
-                </ScrollView>
+                </View>
                 
             </View>
         );
