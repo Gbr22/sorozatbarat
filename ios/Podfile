@@ -88,6 +88,8 @@ target 'sorozatbarat' do
   add_flipper_pods!
   pod 'react-native-cookies', :path => '../node_modules/@react-native-community/cookies'
 
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
   post_install do |installer|
     flipper_post_install(installer)
   end

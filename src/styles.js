@@ -3,7 +3,7 @@ import {StatusBar} from 'react-native';
 
 var themes={
   dark:{
-    backgroundColor: '#262626',
+    backgroundColor: '#212121',
     refreshColor: '#404040',
     color:"#f2f2f2",
     theme:'#FFA600',

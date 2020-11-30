@@ -43,7 +43,7 @@ export function getNavigator(Stack, Comp, title){
 export default function getStackItems(Stack){
     return (
         <Fragment>
-            <Stack.Screen name="Details" component={SeriesDetailsScreen} options={{ title:"Sorozat" }} />
+            <Stack.Screen name="Details" component={SeriesDetailsScreen} options={{ title:"Sorozat", headerShown: false, }} />
             <Stack.Screen name="Links" component={LinksScreen} options={{ title:"Linkek" }} />
             <Stack.Screen name="Login" component={LoginScreen} options={{ title:"Bejelentkezés" }} />
         </Fragment>

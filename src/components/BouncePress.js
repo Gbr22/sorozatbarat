@@ -27,16 +27,15 @@ export default class TouchableButton extends React.Component {
         return (
             
                 <TouchableWithoutFeedback
-                    onPress={this.props.onPress}
-                    style={{
-                        flex:1,
-                    }}
+                    {...this.props}    
+                    
                     onPressOut={() => {
                         transition(1,1);
                     }}
                     onPressIn={() => {
                         transition(0.95, 0.85);
                     }}
+                    
                 >
                     <Animatable.View
                         style={s}

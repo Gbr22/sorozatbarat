@@ -94,6 +94,9 @@ class Home extends React.Component {
                                     var cardPadding = 8;
                                     return (
                                         <BouncePress
+                                            style={{
+                                                flex:1,
+                                            }}
                                             onPress={()=>{
                                                 props.navigation.navigate("Details", {
                                                     series: item,
@@ -163,6 +166,9 @@ class Home extends React.Component {
                                 return (
                                     <Fragment>
                                         <BouncePress
+                                            style={{
+                                                flex:1,
+                                            }}
                                             onPress={()=>{
                                                 props.navigation.navigate("Details", {
                                                     series: item,

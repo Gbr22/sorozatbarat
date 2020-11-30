@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Fragment } from 'react';
-import { StyleSheet, Text, View, Image, Picker, Linking } from 'react-native';
+import { StyleSheet, Text, View, Image, Picker, Linking, PixelRatio } from 'react-native';
 import { getHomePageData, getDetails, getUserAgent } from '../logic/data';
 import styles, { otherStyles } from '../styles';
 import { FlatList, ScrollView, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -8,8 +8,66 @@ import TouchFeedback from '../components/TouchFeedback';
 import BouncePress from '../components/BouncePress';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Feather } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons'; 
+import LinearGradient from 'react-native-linear-gradient';
+
+class Desc extends React.Component {
+    state = {
+        isDescOpen:false,
+    }
+    render(){
+        var item = this.props.item;
+        var description = item.description;
+        function getShortDesc(){
+            var words = description.split(" ");
+            var len = 180;
+            while (words.join(" ").length > len){
+                words.pop();
+            }
+            var short = words.join(" ");
+            if (short != description){
+                short+="...";
+            }
+            
+            return short;
+        }
+        var toggleDesc = ()=>{
+            this.setState({
+                isDescOpen:!this.state.isDescOpen
+            })
+        }
+        return <View
+            style={{
+                paddingVertical: 5,
+                paddingHorizontal: 20,
+            }}
+        >
+            <TouchableWithoutFeedback
+                onPress={toggleDesc}
+            >
+                <Text
+                    style={{
+                        color: "#FAFAFA",
+                        fontSize: 14,
+                    }}
+                >
+                    { this.state.isDescOpen ? description : getShortDesc() }
+                </Text>
+            </TouchableWithoutFeedback>
+            <TouchableOpacity
+                onPress={toggleDesc}
+            >
+                <Text
+                    style={{
+                        color: "#B1B1B1",
+                        fontSize: 14,
+                        textAlign: "center"
+                    }}
+                >{this.state.isDescOpen ? "Kevesebb" : "Több"}</Text>
+            </TouchableOpacity>
+        </View>
+    }
+}
 
 export default class SeriesDetailsScreen extends React.Component {
     state = {
@@ -32,9 +90,10 @@ export default class SeriesDetailsScreen extends React.Component {
     componentDidMount(){
         this.openURL(this.props.route.params.series.url);
     }
+    
     render(){
         var item = this.state.item;
-
+        
         
         if (this.state.errored){
             return (
@@ -77,31 +136,53 @@ export default class SeriesDetailsScreen extends React.Component {
             
             resizeMode: 'contain',
         };
+        var score = null;
 
         function DetailIcon({width,height,url,img}){
             var loadInBrowser = () => {
                 Linking.openURL(url).catch(err => {});
             };
             return (
-                <BouncePress
-                    onPress={()=>{
-                        loadInBrowser();
-                    }}
-                >
-                    <Image source={img}    
-                        style={[
-                            detailsIcon,
-                            {
-                                height: height,
-                                width: width,
-                                marginRight: 2
-                            }
-                        ]}
-                    />
-                </BouncePress>
+                    <BouncePress
+                        style={{
+                            marginHorizontal: 6,
+                            width,
+                            height,
+                        }}
+                        onPress={()=>{
+                            loadInBrowser();
+                        }}
+                    >
+                        <View
+                        >
+                            <Image source={img}    
+                                style={[
+                                    detailsIcon,
+                                    {
+                                        height: height,
+                                        width: width,
+                                    }
+                                ]}
+                            />
+                        </View>
+                    </BouncePress>
+                
             )
         }
-        var s = 0.8;
+        var s = 0.5;
+        function getOriginalTitle(){
+            if(!item.originalTitle){
+                return null;
+            }
+            if (item.originalTitle.indexOf(`(${item.year})`) != -1) {
+                return item.originalTitle;
+            } else {
+                return `${item.originalTitle} (${item.year})`;
+            }
+        }
+        
+        
+        
         return (
             
             <View
@@ -123,176 +204,202 @@ export default class SeriesDetailsScreen extends React.Component {
                         <Fragment>
                             <View
                                 style={{
-                                    flex:0,
-                                    justifyContent: "flex-start",
-                                    alignItems: "center",
-                                    flexDirection: "row",
-                                    padding: 20
+                                    paddingTop: 15,
+                                    paddingBottom: 10,
+                                    /* height: 250, */
+                                    /* borderColor: "red",
+                                    borderBottomWidth: 3, */
                                 }}
                             >
                                 <View
                                     style={{
-                                        height: imgHeight,
-                                        width: imgWidth,
-                                        overflow: "hidden"
+                                        position:"absolute",
+                                        top:0,
+                                        bottom:0,
+                                        left:0,
+                                        right:0,
+                                        flex:1,
                                     }}
                                 >
-                                    <Image source={{uri:item.image}} 
+                                    <Image
+                                        source={{uri:item.image}}
                                         style={{
-                                            flex: 1,
-                                            borderRadius: 4
+                                            flex:1
+                                        }}
+                                        resizeMode="cover"
+                                        blurRadius={1}
+                                    >
+                                    </Image>
+                                    <LinearGradient
+                                        colors={['rgba(33, 33, 33,0.35)', 'rgb(33, 33, 33)']}
+                                        style={{
+                                            position:"absolute",
+                                            top:0,
+                                            bottom:0,
+                                            left:0,
+                                            right:0,
+                                            flex:1,
+                                        }}
+                                    >
+                                        
+                                    </LinearGradient>
+                                </View>
+                                <View
+                                    style={{
+                                        justifyContent:"center",
+                                        alignItems:"center",
+                                        /* flex:1, */
+                                    }}
+                                >
+                                    <Image
+                                        source={{uri:item.image}}
+                                        style={{
+                                            width: 114,
+                                            height: 171,
+                                            borderRadius: 3,
+                                            
+                                            
                                         }}
                                         resizeMode="contain"
-                                    />
-                                </View>
-                                <View
-                                    style={{
-                                        flex: 1,
-                                        justifyContent: "center",
-                                        alignItems: "flex-start",
-                                        paddingLeft: 20,
-                                    }}
-                                >
+                                    >
+                                    </Image>
                                     <Text
-                                        style={[
-                                            styles.text,
-                                            {
-                                                fontSize: 25,
-                                                fontWeight: "bold"
-                                            }
-                                        ]}
-                                    >
-                                        {item.title}
-                                    </Text>
-                                    {item.originalTitle ? <Text
-                                        style={[
-                                            styles.textSmall,
-                                            {
-                                                fontSize: 20,
-                                                fontStyle: "italic",
-                                            }
-                                        ]}
-                                    >
-                                        {"("+item.originalTitle+")"}
-                                    </Text> : null}
-                                    <Text
-                                        style={[
-                                            styles.textSmall,
-                                            {
-                                                fontSize: 18,
-                                                
-                                            }
-                                        ]}
-                                    >
-                                        {item.year}
-                                    </Text>
-                                </View>
-                            </View>
-                            <View
-                                style={{
-                                    flexDirection:"row",
-                                    paddingHorizontal: 20,
-                                    paddingBottom:15,
-                                    justifyContent: "flex-start",
-                                    alignItems:"center"
-                                }}   
-                            >
-                                { imdb ? <DetailIcon width={64*s} height={32*s} img={require('../icons/imdb.png')} url={imdb} /> : null}
-                                { porthu ? <DetailIcon width={76*s} height={32*s} img={require('../icons/porthu.png')} url={porthu} /> : null}
-                                
-                            </View>
-                            <View
-                                style={{
-                                    paddingHorizontal: 20
-                                }}
-                            >
-                                <View
-                                    style={{
-                                        marginBottom: 15,
-                                        flexDirection: "row",
-                                        justifyContent: "flex-start",
-                                        alignItems: "center",
-                                        flexWrap: "wrap"
-                                    }}
-                                >
-                                    
+                                        style={{
+                                            fontWeight: "bold",
+                                            fontSize: 21,
+                                            color: "#FFFFFF",
+                                        }}
+                                    >{item.title}</Text>
                                     {
-                                        (()=>{
-                                            var arr = tags.map(tag=>{
-                                                return (
-                                                    <TouchableOpacity
-                                                        key={tag.url}
-                                                    >
-                                                        <Text
-                                                            
-                                                            style={[
-                                                                styles.textNormal,
-                                                                styles.link
-                                                            ]}
-                                                        >
-                                                            {tag.title}
-                                                        </Text>
-                                                    </TouchableOpacity>
-                                                )
-                                            });
-                                            arr = arr.reduce((arr, b) => [...arr, b, "|"], []).map((e,i)=>{
-                                                if (e == "|"){
-                                                    return (
-                                                        <View
-                                                            key={i}
-                                                            style={{
-                                                                width: 1,
-                                                                height: 12,
-                                                                flex:0,
-                                                                backgroundColor: otherStyles.colors.divider,
-                                                                marginHorizontal: 5,
-                                                            }}
-                                                        >
-                                                        </View>
-                                                    )
-                                                }
-                                                return e;
-                                            });
-                                            arr.pop();
-                                            return arr;
-                                        })()
+                                        getOriginalTitle() ? <Text
+                                            style={{
+                                                color:"#C1C1C1",
+                                                fontSize: 16,
+                                            }}
+                                        >{getOriginalTitle()}</Text> : null
                                     }
-                                    
                                 </View>
-                                <Text
-                                    style={{color: styles.textSmall.color}}
-                                >
-                                    { description }
-                                </Text>
                             </View>
                             <View
                                 style={{
-                                    flex:1,
-                                    padding: 20,
+                                    height: 40,
                                     flexDirection: "row",
                                     justifyContent: "center",
-                                    alignItems: "center",
+                                    alignItems: "center"
                                 }}
                             >
-                                <Picker
-                                    selectedValue={selectedSeason.url}
-                                    style={{ height: 50, width: 150, flex:1, color:styles.textNormal.color }}
-                                    onValueChange={(itemValue, itemIndex) => {
-                                        this.openURL(itemValue);
+                                { porthu ? <DetailIcon width={238/54*18} height={18} img={require('../icons/porthu.png')} url={porthu} /> : null}
+                                { imdb ? <DetailIcon width={143/54*18} height={18} img={require('../icons/imdb.png')} url={imdb} /> : null}
+                                { score ? <View
+                                    style={{
+                                        flexDirection: "row",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        /* borderWidth: 1,
+                                        borderColor: "red", */
+                                        marginHorizontal: 6,
                                     }}
-                                    mode="dialog"
-                                    
                                 >
-                                    {
-                                        seasons.map((e,i)=>{
-                                            return (
-                                                <Picker.Item label={e.title} key={e.url} value={e.url} />
-                                            );
-                                        })
-                                    }
-                                </Picker>
-                                
+                                    <Text style={{fontSize: 18, color: "#D3D3D3", fontWeight: "bold"}}>${score}</Text>
+                                    <AntDesign style={{marginLeft:2, fontSize: 16, color: "#D3D3D3"}} name="star"></AntDesign>
+                                </View> : null}
                             </View>
+                            <View
+                                style={{
+                                    
+                                    height: 47,
+                                    
+                                }}
+                            >
+                                <ScrollView
+                                    horizontal={true}
+                                    style={{
+                                        flex: 1,
+                                        height: 47,
+                                    }}
+                                    contentContainerStyle={{
+                                        alignItems: "center",
+                                        paddingHorizontal: 16,
+                                    }}
+                                    ref={ref => {this.scrollView = ref}}
+                                    onContentSizeChange={() => this.scrollView.scrollToEnd()}
+                                >
+                                {
+                                    seasons.map((e,i)=>{
+                                        var active = e == selectedSeason;
+                                        var url = e.url;
+                                        return (
+                                            <TouchableOpacity key={e.url}
+                                                style={{
+                                                    paddingHorizontal: 20,
+                                                    paddingVertical: 8,
+                                                    backgroundColor: active ? "#4A4134" : "#313131",
+                                                    marginHorizontal: 3,
+                                                    borderRadius: 35,
+                                                }}
+                                                onPress={() => {
+                                                    this.openURL(url);
+                                                }}
+                                            >
+                                                <Text
+                                                    style={{
+                                                        fontSize:14,
+                                                        color: active ? "#FFA41B" : "#ffffff",
+                                                    }}
+                                                >
+                                                    {e.title}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        );
+                                    })
+                                }
+                                </ScrollView>
+                            </View>
+                            <View
+                                style={{
+                                    flexDirection: "row",
+                                    justifyContent: "flex-start",
+                                    flexWrap: "wrap",
+                                    paddingHorizontal: 20,
+                                    paddingVertical: 5,
+                                }}
+                            >
+                                { item.tags.map((tag,i)=>{
+                                    return <View key={tag.url}
+                                        style={{
+                                            flexDirection: "row",
+                                            
+                                        }}
+                                    >
+                                        
+                                        <TouchableOpacity
+                                            
+                                        >
+                                            <Text
+                                                
+                                                style={{
+                                                    color: "#FFE3BA",
+                                                    fontSize: 14,
+                                                }}
+                                            >
+                                                {tag.title}
+                                            </Text>
+                                        </TouchableOpacity>
+                                        {
+                                            i != item.tags.length-1 ? <Text     
+                                                style={{
+                                                    color: "#B1B1B1",
+                                                    fontSize: 14,
+                                                }}
+                                            >
+                                                {", "}
+                                            </Text>: null 
+                                        }
+                                    </View>
+                                })
+                                }
+                            </View>
+                            <Desc item={item}></Desc>
                         </Fragment>
                     }
                     data={episodes}
