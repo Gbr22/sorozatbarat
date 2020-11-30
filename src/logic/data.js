@@ -365,7 +365,7 @@ export async function getDetails(url){
     var description = "";
     description = infoTable.find(".tags").parent().find("p:not(.tags)").text().trim();
     
-    
+    title = title.replace(`(${year})`,"");
     var originalTitle = title?.match(/ {0,1}\((.*?)\)/g)?.[0];
     if (originalTitle){
         title = title.replace(originalTitle,"");

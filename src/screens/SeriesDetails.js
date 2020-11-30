@@ -268,6 +268,7 @@ export default class SeriesDetailsScreen extends React.Component {
                                             fontWeight: "bold",
                                             fontSize: 21,
                                             color: "#FFFFFF",
+                                            textAlign: "center"
                                         }}
                                     >{item.title}</Text>
                                     {
@@ -275,6 +276,7 @@ export default class SeriesDetailsScreen extends React.Component {
                                             style={{
                                                 color:"#C1C1C1",
                                                 fontSize: 16,
+                                                textAlign: "center"
                                             }}
                                         >{getOriginalTitle()}</Text> : null
                                     }
