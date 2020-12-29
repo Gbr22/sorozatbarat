@@ -331,6 +331,8 @@ export default class SeriesDetailsScreen extends React.Component {
                                     </View>
                                 </View>
                             </View>
+                            
+                            { porthu || imdb || score ?
                             <View
                                 style={{
                                     height: 40,
@@ -354,7 +356,7 @@ export default class SeriesDetailsScreen extends React.Component {
                                     <Text style={{fontSize: 18, color: "#D3D3D3", fontWeight: "bold"}}>${score}</Text>
                                     <AntDesign style={{marginLeft:2, fontSize: 16, color: "#D3D3D3"}} name="star"></AntDesign>
                                 </View> : null}
-                            </View>
+                            </View> : null }
                             <View
                                 style={{
                                     
