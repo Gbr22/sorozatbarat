@@ -84,17 +84,18 @@ export default class LinksScreen extends React.Component {
                                 })
                             }
                             return (
-                                <TouchableNativeFeedback
+                                <TouchFeedback
                                     key={e.title}
                                     onPress={()=>{}}
                                     style={{
-                                        paddingVertical: 10,
-                                        paddingHorizontal: 20
+                                        
                                     }}
                                 >
                                     <View
                                         style={{
                                             flexDirection:"row",
+                                            paddingVertical: 10,
+                                            paddingHorizontal: 20
                                         }}
                                     >
                                         <View
@@ -168,7 +169,7 @@ export default class LinksScreen extends React.Component {
                                             </Text>
                                         </TouchableWithoutFeedback>
                                     </View>
-                                </TouchableNativeFeedback>
+                                </TouchFeedback>
                             )
                         })
                     }

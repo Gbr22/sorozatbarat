@@ -22,6 +22,7 @@ import { GlobalContext, initialGlobalState, setUpdate, AppMouted } from './src/G
 import LoginScreen from './src/screens/Login';
 import { getUA } from './src/logic/data';
 import { playVideo } from './src/logic/util';
+import Ripple from 'react-native-material-ripple';
 
 export default class App extends React.Component {
   state=Object.assign({},initialGlobalState);
@@ -69,6 +70,9 @@ export default class App extends React.Component {
                           forceInset={{top:'always'}}
                           screenOptions={{
                             
+                          }}
+                          tabBarOptions={{
+                            keyboardHidesTabBar: true,
                           }}
                         >
                           <Tab.Screen options={{ title:"Kezdőlap" }} name="Home" component={HomeScreen} />
@@ -162,13 +166,17 @@ function MyTabBar({ state, descriptors, navigation }) {
 
         return (
           <TouchFeedback
+            rippleColor="rgba(255,255,255,0.5)"
             accessibilityRole="button"
             accessibilityStates={isFocused ? ['selected'] : []}
             accessibilityLabel={options.tabBarAccessibilityLabel}
             testID={options.tabBarTestID}
             onPress={onPress}
             onLongPress={onLongPress}
-            style={{ flex: 1 }}
+            style={{
+              flex: 1,
+              height: 55,
+            }}
             key={route.key}
           >
             <View

@@ -372,6 +372,8 @@ export default class SeriesDetailsScreen extends React.Component {
                                     }}
                                     ref={ref => {this.scrollView = ref}}
                                     onContentSizeChange={() => this.scrollView.scrollToEnd()}
+                                    showsVerticalScrollIndicator={false}
+                                    showsHorizontalScrollIndicator={false}
                                 >
                                 {
                                     seasons.map((e,i)=>{
