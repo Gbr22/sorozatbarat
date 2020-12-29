@@ -11,7 +11,7 @@ const Tab = createBottomTabNavigator();
 import HomeScreen from './src/screens/Home';
 import OtherScreen from './src/screens/Other';
 
-import { Ionicons } from '@expo/vector-icons';
+
 import { Feather } from '@expo/vector-icons';
 import { TouchableWithoutFeedback, TouchableHighlight } from 'react-native-gesture-handler';
 

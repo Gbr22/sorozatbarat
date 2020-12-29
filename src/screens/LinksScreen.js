@@ -11,7 +11,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Feather } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons'; 
 import { playVideo } from '../logic/util';
-
+import LoadingContainer from '../components/LoadingContainer';
 
 export default class LinksScreen extends React.Component {
     state = {
@@ -38,10 +38,7 @@ export default class LinksScreen extends React.Component {
 
         if (data == null){
             return (
-                <View
-                    style={styles.screenCont}
-                >
-                </View>
+                <LoadingContainer></LoadingContainer>
             )
         }
 

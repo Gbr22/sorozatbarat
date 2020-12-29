@@ -3,13 +3,15 @@ import React, { Fragment } from 'react';
 import { StyleSheet, Text, View, Image, Picker, Linking, PixelRatio } from 'react-native';
 import { getHomePageData, getDetails, getUserAgent } from '../logic/data';
 import styles, { otherStyles } from '../styles';
-import { FlatList, ScrollView, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { FlatList, ScrollView, TouchableHighlight, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import TouchFeedback from '../components/TouchFeedback';
 import BouncePress from '../components/BouncePress';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { AntDesign } from '@expo/vector-icons'; 
 import LinearGradient from 'react-native-linear-gradient';
+import { Feather } from '@expo/vector-icons';
+import LoadingContainer from '../components/LoadingContainer';
 
 class Desc extends React.Component {
     state = {
@@ -121,7 +123,7 @@ export default class SeriesDetailsScreen extends React.Component {
             );
         }
         else if (!item) {
-            return <View style={styles.container}></View>
+            return <LoadingContainer></LoadingContainer>;
         }
         
 
@@ -243,6 +245,45 @@ export default class SeriesDetailsScreen extends React.Component {
                                     >
                                         
                                     </LinearGradient>
+                                </View>
+                                <View
+                                    style={{
+                                        position:"absolute",
+                                        top:0,
+                                        bottom:0,
+                                        left:0,
+                                        right:0,
+                                        flex:1,
+                                    }}
+                                >
+                                    <View
+                                        style={{
+                                            margin: 9,
+                                            /* backgroundColor: "red", */
+                                            /* backgroundColor: "hsla(0, 0%, 0%,0.2)", */
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            width: 35,
+                                            height: 35,
+                                            
+                                            borderRadius: 38
+                                        }}
+                                    >
+                                        <TouchableOpacity
+                                            onPress={()=>{
+                                                this.props.navigation.goBack();
+                                            }}
+                                            style={{
+                                                borderRadius: 38,
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                                flex:1
+                                            }}
+                                        >
+                                            <Feather name={"arrow-left"} size={24} color={otherStyles.colors.color} />
+                                        </TouchableOpacity>
+                                    </View>
+                                    
                                 </View>
                                 <View
                                     style={{
