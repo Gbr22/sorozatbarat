@@ -77,8 +77,10 @@ class Search extends React.Component {
                                 borderRadius: 15,
                                 margin: 20,
                                 marginTop: 20,
-                                borderWidth: 1,
-                                borderColor: otherStyles.colors.divider,
+                                borderWidth: 0,
+                                /* borderWidth: 1,
+                                borderColor: otherStyles.colors.divider, */
+                                backgroundColor: "rgba(255,255,255,0.05)",
                                 paddingHorizontal: 20,
 
                                 color: styles.text.color,
@@ -89,12 +91,12 @@ class Search extends React.Component {
                                 },
                                 shadowOpacity: 0.22,
                                 shadowRadius: 2.22, */
-
+                                
                                 elevation: 1,
                             }}
 
                             placeholder="Keresés"
-                            
+                            selectionColor="rgba(255, 166, 0,0.7)"
                             onChangeText={text => onChangeText(text)}
                             onFocus={()=>{
                                 if (!this.state.query){

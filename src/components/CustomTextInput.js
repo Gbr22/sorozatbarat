@@ -16,6 +16,7 @@ export default class CustomTextInput extends React.Component {
                         paddingHorizontal: 15,
                         paddingVertical: 6,
                         borderColor: otherStyles.colors.divider,
+                        backgroundColor: "rgba(255,255,255,0.075)",
                         borderWidth: 1,
                         flexDirection: "row",
                         alignItems: "center"
@@ -34,6 +35,7 @@ export default class CustomTextInput extends React.Component {
 
                     {...this.props}
                     placeholderTextColor={styles.textSmall.color}
+                    selectionColor="rgba(255, 166, 0,0.7)"
                     style={{
                         padding:0,
                         color: styles.text.color,
