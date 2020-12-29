@@ -8,9 +8,16 @@ import { otherStyles } from '../styles';
 export function getNavigator(Stack, Comp, title){
     return (
         <Stack.Navigator initialRouteName={"Home"}
+
+            tabBarOptions={{
+                keyboardHidesTabBar: true,
+            }}
             screenOptions={{
                 headerStyle: {
-                    backgroundColor: otherStyles.theme.backgroundColor,
+                    
+                    backgroundColor: "hsl(0, 0%, 18%)",
+                    shadowRadius: 0,
+                    elevation: 0,
                 },
                 headerTintColor: otherStyles.theme.text.normal,
                 headerTitleStyle: {
@@ -35,12 +42,26 @@ export function getNavigator(Stack, Comp, title){
             }}
             mode="modal"
         >
-            <Stack.Screen name={"Home"} component={Comp} options={{ title }}/>
+            <Stack.Screen
+                name={"Home"} component={Comp}
+                options={{
+                    title,
+                    headerShown:true,
+                    headerTitleStyle: { alignSelf: 'center' },
+                    headerStyle: {
+                        backgroundColor: otherStyles.theme.backgroundColor,
+                        shadowRadius: 0,
+                        elevation: 0,
+                    }
+                }}
+            />
             { getStackItems(Stack) }
         </Stack.Navigator>
     );
 }
+
 export default function getStackItems(Stack){
+    
     return (
         <Fragment>
             <Stack.Screen name="Details" component={SeriesDetailsScreen} options={{ title:"Sorozat", headerShown: false, }} />

@@ -76,7 +76,7 @@ class Search extends React.Component {
                                 height: 40,
                                 borderRadius: 15,
                                 margin: 20,
-                                marginTop: 20,
+                                marginTop: 4,
                                 borderWidth: 0,
                                 /* borderWidth: 1,
                                 borderColor: otherStyles.colors.divider, */

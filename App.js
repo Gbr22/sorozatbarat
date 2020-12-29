@@ -23,6 +23,7 @@ import LoginScreen from './src/screens/Login';
 import { getUA } from './src/logic/data';
 import { playVideo } from './src/logic/util';
 import Ripple from 'react-native-material-ripple';
+import { processScreenOptions } from './src/components/StackItems';
 
 export default class App extends React.Component {
   state=Object.assign({},initialGlobalState);
@@ -49,7 +50,7 @@ export default class App extends React.Component {
           flex:1
         }}
       >
-        <StatusBar backgroundColor={styles.container.backgroundColor} />
+        <StatusBar translucent backgroundColor="transparent" />
         <SafeAreaProvider
           style={{
             flex:1

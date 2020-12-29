@@ -12,6 +12,8 @@ import { AntDesign } from '@expo/vector-icons';
 import LinearGradient from 'react-native-linear-gradient';
 import { Feather } from '@expo/vector-icons';
 import LoadingContainer from '../components/LoadingContainer';
+import { Platform, NativeModules } from 'react-native';
+const { StatusBarManager } = NativeModules;
 
 class Desc extends React.Component {
     state = {
@@ -193,7 +195,6 @@ export default class SeriesDetailsScreen extends React.Component {
                     paddingHorizontal: 0,
                 }]}
             >
-        
                 <FlatList
                     ListFooterComponent={
                         <View
@@ -265,6 +266,7 @@ export default class SeriesDetailsScreen extends React.Component {
                                             alignItems: "center",
                                             width: 35,
                                             height: 35,
+                                            marginTop: 10 + StatusBarManager.HEIGHT,
                                             
                                             borderRadius: 38
                                         }}
@@ -277,7 +279,7 @@ export default class SeriesDetailsScreen extends React.Component {
                                                 borderRadius: 38,
                                                 justifyContent: "center",
                                                 alignItems: "center",
-                                                flex:1
+                                                flex:1,
                                             }}
                                         >
                                             <Feather name={"arrow-left"} size={24} color={otherStyles.colors.color} />
@@ -289,6 +291,7 @@ export default class SeriesDetailsScreen extends React.Component {
                                     style={{
                                         justifyContent:"center",
                                         alignItems:"center",
+                                        paddingTop: StatusBarManager.HEIGHT,
                                         /* flex:1, */
                                     }}
                                 >
@@ -298,7 +301,6 @@ export default class SeriesDetailsScreen extends React.Component {
                                             width: 114,
                                             height: 171,
                                             borderRadius: 3,
-                                            
                                             
                                         }}
                                         resizeMode="contain"
