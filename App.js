@@ -1,7 +1,7 @@
-import { StatusBar } from 'expo-status-bar';
+
 import React from 'react';
 
-import { StyleSheet, View, Text, TouchableOpacity,TouchableNativeFeedback, SafeAreaView, Platform } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity,TouchableNativeFeedback, SafeAreaView, Platform, StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -42,48 +42,56 @@ export default class App extends React.Component {
   render(){
 
     return (
-      <SafeAreaProvider
+      <View
         style={{
+          backgroundColor: styles.container.backgroundColor,
           flex:1
         }}
       >
-      <GlobalContext.Provider value={{state:this.state, update:(o)=>{this.update(o)}}}>
-      
-        <GlobalContext.Consumer>
-            {({state, update}) => {
-              if (state.loggedIn === true){
-                return (
-                 
-                    <NavigationContainer>
-                      
-                      <Tab.Navigator
-                        initialRouteName="Home"
-                        tabBar = {props => <MyTabBar {...props} />}
-                        forceInset={{top:'always'}}
-                        screenOptions={{
-                          
-                        }}
-                      >
-                        <Tab.Screen options={{ title:"Kezdőlap" }} name="Home" component={HomeScreen} />
-                        <Tab.Screen options={{ title:"Keresés" }} name="Search" component={SearchScreen} />
-                        <Tab.Screen options={{ title:"Fiók" }} name="Other" component={OtherScreen} />
-                      </Tab.Navigator>
-                    
-                      
-                    </NavigationContainer>
+        <StatusBar backgroundColor={styles.container.backgroundColor} />
+        <SafeAreaProvider
+          style={{
+            flex:1
+          }}
+        >
+        <GlobalContext.Provider value={{state:this.state, update:(o)=>{this.update(o)}}}>
+        
+          <GlobalContext.Consumer>
+              {({state, update}) => {
+                if (state.loggedIn === true){
+                  return (
                   
-                );
-              } else if (state.loggedIn === false){
-                return <LoginScreen></LoginScreen>
-              } else {
-                return (<View></View>);
-              }
-            }}
-        </GlobalContext.Consumer>
-      
+                      <NavigationContainer>
+                        
+                        <Tab.Navigator
+                          initialRouteName="Home"
+                          tabBar = {props => <MyTabBar {...props} />}
+                          forceInset={{top:'always'}}
+                          screenOptions={{
+                            
+                          }}
+                        >
+                          <Tab.Screen options={{ title:"Kezdőlap" }} name="Home" component={HomeScreen} />
+                          <Tab.Screen options={{ title:"Keresés" }} name="Search" component={SearchScreen} />
+                          <Tab.Screen options={{ title:"Fiók" }} name="Other" component={OtherScreen} />
+                        </Tab.Navigator>
+                      
+                        
+                      </NavigationContainer>
+                    
+                  );
+                } else if (state.loggedIn === false){
+                  return <LoginScreen></LoginScreen>
+                } else {
+                  return (<View></View>);
+                }
+              }}
+          </GlobalContext.Consumer>
+        
 
-      </GlobalContext.Provider>
-      </SafeAreaProvider>
+        </GlobalContext.Provider>
+        </SafeAreaProvider>
+      </View>
     );
   }
 }
@@ -150,7 +158,7 @@ function MyTabBar({ state, descriptors, navigation }) {
         })[route.name];
 
         var color = isFocused ? otherStyles.colors.theme : otherStyles.theme.text.nav;
-        var iconSize = 25;
+        var iconSize = 22;
 
         return (
           <TouchFeedback
@@ -168,12 +176,15 @@ function MyTabBar({ state, descriptors, navigation }) {
                 flex:1,
                 justifyContent: "center",
                 alignItems:"center",
-                paddingVertical: 5
+                paddingVertical: 8
               }}
             >
               <Feather name={iconName} size={iconSize} color={color} />
 
-              <Text style={{ color: color }}>
+              <Text style={{
+                color: color,
+                fontSize: 12
+              }}>
                 {label}
               </Text>
             </View>

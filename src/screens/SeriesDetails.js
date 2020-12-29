@@ -54,7 +54,7 @@ class Desc extends React.Component {
                     { this.state.isDescOpen ? description : getShortDesc() }
                 </Text>
             </TouchableWithoutFeedback>
-            <TouchableOpacity
+            { description != getShortDesc() ? (<TouchableOpacity
                 onPress={toggleDesc}
             >
                 <Text
@@ -64,7 +64,7 @@ class Desc extends React.Component {
                         textAlign: "center"
                     }}
                 >{this.state.isDescOpen ? "Kevesebb" : "Több"}</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>) : null }
         </View>
     }
 }
@@ -263,23 +263,29 @@ export default class SeriesDetailsScreen extends React.Component {
                                         resizeMode="contain"
                                     >
                                     </Image>
-                                    <Text
+                                    <View
                                         style={{
-                                            fontWeight: "bold",
-                                            fontSize: 21,
-                                            color: "#FFFFFF",
-                                            textAlign: "center"
+                                            marginVertical: 8
                                         }}
-                                    >{item.title}</Text>
-                                    {
-                                        getOriginalTitle() ? <Text
+                                    >
+                                        <Text
                                             style={{
-                                                color:"#C1C1C1",
-                                                fontSize: 16,
+                                                fontWeight: "bold",
+                                                fontSize: 21,
+                                                color: "#FFFFFF",
                                                 textAlign: "center"
                                             }}
-                                        >{getOriginalTitle()}</Text> : null
-                                    }
+                                        >{item.title}</Text>
+                                        {
+                                            getOriginalTitle() ? <Text
+                                                style={{
+                                                    color:"#C1C1C1",
+                                                    fontSize: 16,
+                                                    textAlign: "center"
+                                                }}
+                                            >{getOriginalTitle()}</Text> : null
+                                        }
+                                    </View>
                                 </View>
                             </View>
                             <View
