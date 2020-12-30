@@ -122,6 +122,37 @@ def jscFlavor = 'org.webkit:android-jsc:+'
  */
 def enableHermes = project.ext.react.get("enableHermes", false);
 
+
+
+def getVersionName = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'describe', '--tags'
+            standardOutput = stdout
+        }
+        def str = stdout.toString().trim();
+        if (str.indexOf("v") == 0){
+            str = str.replaceFirst("v","");
+        }
+        return str;
+    }
+    catch (ignored) {
+        return null;
+    }
+}
+
+def getVersionCode = { ->
+    def versionName = getVersionName();
+    def sv = versionName.split("-")[0];
+    def parts = sv.split("\\.");
+    return parts[0].toInteger()* 1000 * 1000 + parts[1].toInteger()*1000 + parts[2].toInteger();
+}
+
+
+println("Version: " + getVersionName());
+println("Version number: " + getVersionCode());
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -134,8 +165,8 @@ android {
         applicationId "com.sorozatbarat"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode getVersionCode()
+        versionName getVersionName()
     }
     splits {
         abi {
