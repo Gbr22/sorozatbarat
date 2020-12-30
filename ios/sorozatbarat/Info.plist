@@ -55,5 +55,10 @@
 	<false/>
   <key>UIStatusBarStyle</key>
   <string>UIStatusBarStyleDefault</string>
+  <key>UILaunchStoryboardName</key>
+  <string>SplashScreen</string>
+  <key>UIStatusBarStyle</key>
+  <string>UIStatusBarStyleDefault</string>
+
 </dict>
 </plist>
