@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Fragment } from 'react';
-import { StyleSheet, Text, View, Image, Picker, Linking, ToastAndroid } from 'react-native';
+import { StyleSheet, Text, View, Image, Picker, Linking, ToastAndroid, Alert } from 'react-native';
 import { getHomePageData, getDetails, getUserAgent, getLinks, getPlayEndURL, getDownloadURL } from '../logic/data';
 import styles, { otherStyles } from '../styles';
 import { FlatList, ScrollView, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback, TouchableNativeFeedback } from 'react-native-gesture-handler';
@@ -71,22 +71,42 @@ export default class LinksScreen extends React.Component {
                                     referer,
                                     e.url
                                 ).then(url=>{
-                                    getDownloadURL(url).then(json=>{
-                                        playVideo(json.videoUrl,json.subtitles[0]?.url);
-                                    }).catch(err=>{
-                                        var msg = err.message;
-                                        if (err.message == "Missing video url"){
-                                            msg = "Hiba, url nem található! Valószínúleg a videót törölték";
-                                        }
-                                        ToastAndroid.show(msg,ToastAndroid.LONG);
-                                    })
-                                    
+                                    ToastAndroid.show("Indítás...",ToastAndroid.SHORT);
+                                    if (e.puremotion){
+                                        getDownloadURL(url).then(json=>{
+                                            playVideo(json.videoUrl,json.subtitles[0]?.url);
+                                        }).catch(err=>{
+                                            /* var msg = err.message;
+                                            if (err.message == "Missing video url"){
+                                                msg = "Hiba, url nem található! Valószínúleg a videót törölték";
+                                            }
+                                            ToastAndroid.show(msg,ToastAndroid.LONG); */
+                                            Alert.alert(
+                                                "Hiba!",
+                                                "Nem sikerült puremotion-el indítani a videót. Szertnéd megnyitni a linket böngészőben?",
+                                                [
+                                                  {
+                                                    text: "Nem",
+                                                    onPress: () => console.log("Cancel Pressed"),
+                                                    style: "cancel"
+                                                  },
+                                                  { text: "Igen", onPress: () => {
+                                                    Linking.openURL(url);
+                                                  } }
+                                                ],
+                                                { cancelable: true }
+                                            );
+                                        })
+                                    } else {
+                                        Linking.openURL(url);
+                                    }
                                 })
                             }
                             return (
                                 <TouchFeedback
                                     key={e.title}
-                                    onPress={()=>{}}
+                                    onPress={openLink}
+                                    
                                     style={{
                                         
                                     }}
@@ -133,7 +153,7 @@ export default class LinksScreen extends React.Component {
                                             }}
                                         >
                                             <TouchableWithoutFeedback
-                                                onPress={openLink}
+                                                
                                             >
                                                 <Text
                                                     style={{color:styles.textNormal.color}}
@@ -148,19 +168,25 @@ export default class LinksScreen extends React.Component {
                                                     <Text
                                                         style={{color:styles.textSmall.color}}
                                                     >Feltöltő: </Text>
-                                                    <TouchableOpacity
-                                                        onPress={()=>{
-
-                                                        }}
+                                                    
+                                                    <View
+                                                        onStartShouldSetResponder={event => true}
                                                     >
-                                                        <Text style={styles.link}>{e.uploader.username}</Text>
-                                                    </TouchableOpacity>
+                                                        <TouchableOpacity
+                                                            onPressOut={function(e){
+                                                                
+                                                            }}
+                                                        >
+                                                            <View>
+                                                                <Text style={styles.link}>{e.uploader.username}</Text>
+                                                            </View>
+                                                        </TouchableOpacity>
+                                                    </View>
+                                                    
                                                 </View>
                                             ) : null }
                                         </View>
                                         <TouchableWithoutFeedback
-                                            
-                                            onPress={openLink}
                                         >
                                             <Text
                                                 style={{color:styles.textNormal.color}}

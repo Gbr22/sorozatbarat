@@ -229,6 +229,8 @@ export async function getLinks(url){
                     url:uploaderURL ? urlToAbsolute(uploaderURL) : null,
                     username:row[1].find("a").text().trim(),
                 } : null,
+                puremotion: !!row[0].has("img.plugin").length,
+                hd: !!row[0].has("img.hd").length,
                 lang:{
                     flag:urlToAbsolute(row[0].find("img.flags").attr("src")),
                     title:row[0].find("img.flags").attr("title"),
