@@ -43,7 +43,7 @@ export default class LinksScreen extends React.Component {
         }
 
         var {url, items} = data;
-
+        let cleanTitle = data.title.replace(" - ", " ").replace(" :: "," - ");
         return (
             
             <View
@@ -61,7 +61,7 @@ export default class LinksScreen extends React.Component {
                             paddingVertical: 5,
                         }}
                     >
-                        <Text style={styles.h1}>{data.title.replace(" - ", " ").replace(" :: "," - ")}</Text>
+                        <Text style={styles.h1}>{cleanTitle}</Text>
                     </View>
                     {
                         items.map(e=>{
@@ -74,7 +74,9 @@ export default class LinksScreen extends React.Component {
                                     ToastAndroid.show("Indítás...",ToastAndroid.SHORT);
                                     if (e.puremotion){
                                         getDownloadURL(url).then(json=>{
-                                            playVideo(json.videoUrl,json.subtitles[0]?.url);
+                                            /* console.log("download",json); */
+                                            
+                                            playVideo(json.videoUrl,json.subtitles[0]?.url, {title:cleanTitle});
                                         }).catch(err=>{
                                             /* var msg = err.message;
                                             if (err.message == "Missing video url"){

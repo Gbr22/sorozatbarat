@@ -154,7 +154,7 @@ export function getDownloadURL(dlurl){
                     html:embedhtml
                 })
             }).then(r=>r.json()).then(json=>{
-                console.log("download",json,subtitles);
+                
                 if (json.status == "error"){
                     throw new Error(json.message);
                 }
