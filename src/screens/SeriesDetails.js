@@ -14,6 +14,8 @@ import { Feather } from '@expo/vector-icons';
 import LoadingContainer from '../components/LoadingContainer';
 import { Platform, NativeModules } from 'react-native';
 const { StatusBarManager } = NativeModules;
+import ImdbSvg from "../icons/imdb.svg";
+import PorthuSvg from "../icons/porthu.svg";
 
 class Desc extends React.Component {
     state = {
@@ -142,10 +144,11 @@ export default class SeriesDetailsScreen extends React.Component {
         };
         var score = null;
 
-        function DetailIcon({width,height,url,img}){
+        function DetailIcon({url,img,width,height}){
             var loadInBrowser = () => {
                 Linking.openURL(url).catch(err => {});
             };
+            let Img = img;
             return (
                     <BouncePress
                         style={{
@@ -157,17 +160,8 @@ export default class SeriesDetailsScreen extends React.Component {
                             loadInBrowser();
                         }}
                     >
-                        <View
-                        >
-                            <Image source={img}    
-                                style={[
-                                    detailsIcon,
-                                    {
-                                        height: height,
-                                        width: width,
-                                    }
-                                ]}
-                            />
+                        <View>
+                            <Img height={height} width={width} />
                         </View>
                     </BouncePress>
                 
@@ -341,8 +335,8 @@ export default class SeriesDetailsScreen extends React.Component {
                                     alignItems: "center"
                                 }}
                             >
-                                { porthu ? <DetailIcon width={238/54*18} height={18} img={require('../icons/porthu.png')} url={porthu} /> : null}
-                                { imdb ? <DetailIcon width={143/54*18} height={18} img={require('../icons/imdb.png')} url={imdb} /> : null}
+                                { porthu ? <DetailIcon width={238/54*18} height={18} img={PorthuSvg} url={porthu} /> : null }
+                                { imdb ? <DetailIcon width={143/54*18} height={18} img={ImdbSvg} url={imdb} /> : null}
                                 { score ? <View
                                     style={{
                                         flexDirection: "row",

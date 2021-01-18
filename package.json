@@ -29,6 +29,7 @@
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "~2.9.0",
     "react-native-send-intent": "^1.2.2",
+    "react-native-svg": "12.1.0",
     "react-native-unimodules": "~0.10.1",
     "react-native-user-agent": "^2.1.0",
     "react-native-web": "~0.11.7",
@@ -41,6 +42,7 @@
     "babel-jest": "~25.2.6",
     "jest": "~25.2.6",
     "react-native-clean-project": "^3.4.0",
+    "react-native-svg-transformer": "^0.14.3",
     "react-test-renderer": "~16.11.0"
   },
   "jest": {

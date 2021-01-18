@@ -2,11 +2,27 @@
   "name": "sorozatbarat",
   "displayName": "Sorozatbarát",
   "expo": {
-    "name": "sorozatbarat",
-    "slug": "sorozatbarat",
-    "version": "1.1.0",
+    "name": "Sorozatbarat",
+    "slug": "Sorozatbarat",
+    "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "packagerOpts": {
+      "config": "metro.config.js",
+      "sourceExts": [
+        "expo.ts",
+        "expo.tsx",
+        "expo.js",
+        "expo.jsx",
+        "ts",
+        "tsx",
+        "js",
+        "jsx",
+        "json",
+        "wasm",
+        "svg"
+      ]
+    }
   }
 }
