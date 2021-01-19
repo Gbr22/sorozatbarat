@@ -30,7 +30,8 @@ var URL_BASE_INDEX = "https://www.sorozatbarat.club/";
 import cheerio from 'cheerio-without-node-native';
 import { otherStyles } from '../styles';
 import URI from 'urijs';
-import { Linking } from 'react-native';
+import { AsyncStorage, Linking } from 'react-native';
+import { checkForUpdateAsync } from 'expo-updates';
 
 var data = {
     homepage:null,
@@ -38,6 +39,30 @@ var data = {
 
 export function getUser(){
     return user;
+}
+
+var history = [];
+export function getHistory(){
+    return history;
+}
+async function _getHistory(){
+    let str = await AsyncStorage.getItem("search_history");
+    try {
+        let o = JSON.parse(str) || [];
+        return o;
+    } catch(err){}
+    return [];
+}
+_getHistory().then(h=>history = h);
+
+export async function addHistory(item) {
+    history = history.filter(e=>e.url != item.url);
+    history.push(item);
+    await AsyncStorage.setItem("search_history",JSON.stringify(history));
+}
+export async function removeHistory(item) {
+    history = history.filter(e=>e.url != item.url);
+    await AsyncStorage.setItem("search_history",JSON.stringify(history));
 }
 
 export async function getHomePageData(forceRefresh = false){
@@ -255,23 +280,48 @@ export async function getLinks(url){
         title,
     }
 }
+let lastAutocomplete = {
+    query:null,
+    results:[],
+};
 export async function getAutocomplete(search){
+    function normalize(s) {
+        return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+    }
     var normalized = search.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     console.log("escaped",normalized);
-    var url = URL_BASE+"/series/autocompleteV2?term="+escape(normalized);
-    console.log("search query",url);
-    return fetch(url, {
-        headers: {
-            "User-Agent":UA,
-        }
-    }).then(r=>{
-        return r.json();
-    }).then(json=>{
-        json.forEach(e=>{
-            e.url = urlToAbsolute(e.url);
+    if (lastAutocomplete.query != null && search.indexOf(lastAutocomplete.query) == 0){
+        return lastAutocomplete.results.filter(e=>{
+            let q = normalize(search);
+            
+            function check(prop){
+                if (!e[prop]){
+                    return false;
+                }
+                return normalize(e[prop]).indexOf(q) != -1;
+            }
+            return check("label") || check("value");
+        });
+    } else {
+        var url = URL_BASE+"/series/autocompleteV2?term="+escape(normalized);
+        console.log("search query",url);
+        let json = await fetch(url, {
+            headers: {
+                "User-Agent":UA,
+            }
+        }).then(r=>{
+            return r.json();
+        }).then(json=>{
+            json.forEach(e=>{
+                e.url = urlToAbsolute(e.url);
+            })
+            return json;
         })
+        lastAutocomplete.query = search;
+        lastAutocomplete.results = json;
         return json;
-    })
+    }
+    
 
 }
 export async function getDetails(url){
@@ -372,7 +422,9 @@ export async function getDetails(url){
     if (originalTitle){
         title = title.replace(originalTitle,"");
         originalTitle = originalTitle.replace(" (","").replace(")","");
+        originalTitle = originalTitle.replace(` (${year})`,"");
     }
+    
     
     
     return {

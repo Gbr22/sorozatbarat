@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Fragment } from 'react';
 import { StyleSheet, Text, View, Image, Picker, Linking, PixelRatio } from 'react-native';
-import { getHomePageData, getDetails, getUserAgent } from '../logic/data';
+import { getHomePageData, getDetails, getUserAgent, addHistory } from '../logic/data';
 import styles, { otherStyles } from '../styles';
 import { FlatList, ScrollView, TouchableHighlight, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import TouchFeedback from '../components/TouchFeedback';
@@ -16,7 +16,6 @@ import { Platform, NativeModules } from 'react-native';
 const { StatusBarManager } = NativeModules;
 import ImdbSvg from "../icons/imdb.svg";
 import PorthuSvg from "../icons/porthu.svg";
-
 class Desc extends React.Component {
     state = {
         isDescOpen:false,
@@ -80,12 +79,22 @@ export default class SeriesDetailsScreen extends React.Component {
         item:null,
         errored:false,
         errorMessage:null,
+        isFromSearch:false,
     };
     openURL(url){
         getDetails(url).then((d)=>{
             this.setState({
                 item:d
             })
+            if (this.state.isFromSearch){
+                let h = {
+                    time: Date.now(),
+                    item:Object.assign(Object.assign({},d),{episodes:null}),
+                    url
+                };
+                addHistory(h);
+                console.log("add to history",h.url);
+            }
         }).catch((err)=>{
             this.setState({
                 errorMessage:err.message,
@@ -94,6 +103,11 @@ export default class SeriesDetailsScreen extends React.Component {
         })
     }
     componentDidMount(){
+        if (this.props.route.params.from=="search"){
+            this.setState({
+                isFromSearch:true,
+            })
+        }
         this.openURL(this.props.route.params.series.url);
     }
     
@@ -172,11 +186,7 @@ export default class SeriesDetailsScreen extends React.Component {
             if(!item.originalTitle){
                 return null;
             }
-            if (item.originalTitle.indexOf(`(${item.year})`) != -1) {
-                return item.originalTitle;
-            } else {
-                return `${item.originalTitle} (${item.year})`;
-            }
+            return `${item.originalTitle} (${item.year})`;
         }
         
         

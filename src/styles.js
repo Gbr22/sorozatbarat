@@ -72,6 +72,11 @@ var styles = StyleSheet.create({
         fontWeight: "bold",
         color: currentTheme.text.h1,
         paddingVertical: 10
+    },
+    h2: {
+      fontSize: 20,
+      fontWeight: "bold",
+      color: currentTheme.text.h1,
     }
 });
 export var otherStyles = {
