@@ -424,8 +424,15 @@ export async function getDetails(url){
         originalTitle = originalTitle.replace(" (","").replace(")","");
         originalTitle = originalTitle.replace(` (${year})`,"");
     }
-    
-    
+    title = $(`meta[property="og:title"]`).attr("content");
+    image = $(`meta[property="og:image"]`).attr("content");
+    imagesEl = $(`.seriesimage img`);
+    images = [];
+    imagesEl.each((i,e)=>{
+        let el = $(e);
+        images.push(el.attr("src"));
+    })
+    images = images.map(e=>urlToAbsolute(e));
     
     return {
         description,
@@ -438,7 +445,8 @@ export async function getDetails(url){
         year,
         length,
         imdb,
-        porthu
+        porthu,
+        images,
     }
 }
 

@@ -16,6 +16,10 @@ import { Platform, NativeModules } from 'react-native';
 const { StatusBarManager } = NativeModules;
 import ImdbSvg from "../icons/imdb.svg";
 import PorthuSvg from "../icons/porthu.svg";
+import { Modal } from 'react-native';
+import ImageViewer from 'react-native-image-zoom-viewer';
+
+
 class Desc extends React.Component {
     state = {
         isDescOpen:false,
@@ -145,7 +149,7 @@ export default class SeriesDetailsScreen extends React.Component {
         }
         
 
-        var {description, tags, seasons, episodes, length, imdb, porthu} = item;
+        var {description, tags, seasons, episodes, length, imdb, porthu, images} = item;
         var selectedSeason = seasons.filter(e=>e.active)[0] || seasons[seasons.length-1];
         
         var imageRatio = 136/200;
@@ -199,6 +203,7 @@ export default class SeriesDetailsScreen extends React.Component {
                     paddingHorizontal: 0,
                 }]}
             >
+                
                 <FlatList
                     ListFooterComponent={
                         <View
@@ -299,17 +304,27 @@ export default class SeriesDetailsScreen extends React.Component {
                                         /* flex:1, */
                                     }}
                                 >
-                                    <Image
-                                        source={{uri:item.image}}
-                                        style={{
-                                            width: 114,
-                                            height: 171,
-                                            borderRadius: 3,
-                                            
+                                    <TouchableOpacity
+                                        onPress={()=>{
+                                            this.props.navigation.navigate("Gallery",{
+                                                gallery:{
+                                                    images:images
+                                                }
+                                            });
                                         }}
-                                        resizeMode="contain"
                                     >
-                                    </Image>
+                                        <Image
+                                            source={{uri:item.image}}
+                                            style={{
+                                                width: 114,
+                                                height: 171,
+                                                borderRadius: 3,
+                                                
+                                            }}
+                                            resizeMode="contain"
+                                        >
+                                        </Image>
+                                    </TouchableOpacity>
                                     <View
                                         style={{
                                             marginVertical: 8

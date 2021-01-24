@@ -3,6 +3,7 @@ import SeriesDetailsScreen from '../screens/SeriesDetails';
 import LinksScreen from '../screens/LinksScreen';
 import LoginScreen from '../screens/Login';
 import { otherStyles } from '../styles';
+import GallerysScreen from '../screens/Gallery';
 
 
 export function getNavigator(Stack, Comp, title){
@@ -53,6 +54,7 @@ export function getNavigator(Stack, Comp, title){
                         shadowRadius: 0,
                         elevation: 0,
                     }
+                    
                 }}
             />
             { getStackItems(Stack) }
@@ -64,6 +66,15 @@ export default function getStackItems(Stack){
     
     return (
         <Fragment>
+            <Stack.Screen
+                name="Gallery" component={GallerysScreen}
+                options={{
+                    title:"Képek", headerShown: false, 
+                    mode: 'modal',
+                    cardStyle: { opacity: 0 },
+                    transparentCard: true,
+                }}
+            />
             <Stack.Screen name="Details" component={SeriesDetailsScreen} options={{ title:"Sorozat", headerShown: false, }} />
             <Stack.Screen name="Links" component={LinksScreen} options={{ title:"Linkek" }} />
             <Stack.Screen name="Login" component={LoginScreen} options={{ title:"Bejelentkezés" }} />
