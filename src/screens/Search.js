@@ -68,7 +68,7 @@ class History extends React.Component {
                     </View>
                     <View
                         style={{
-                            flexGrow: 1,
+                            flex: 1,
                         }}
                     >
                         <Text
@@ -111,16 +111,29 @@ class History extends React.Component {
         
         let history = this.state.history.sort((a,b)=>b.time - a.time);
         
-        return history.length > 0 ? <View>
-            <Text
-                style={[
-                    {
-                        paddingHorizontal:30,
-                    },
-                    styles.h2,
-                ]}
-            >Legutóbbi keresések</Text>
+        return history.length > 0 ? 
             <FlatList
+                style={{
+                    flex:1,
+                    borderColor: "green",
+                    borderWidth: 1,
+                }}
+                overScrollMode="never"
+                contentContainerStyle={{
+                    paddingBottom: 65,
+                }}
+                ListHeaderComponent={
+                    <Text
+                        style={[
+                            {
+                                paddingHorizontal:30,
+                            },
+                            styles.h2,
+                        ]}
+                    >Legutóbbi keresések</Text>
+                }
+                
+
                 data={history}
                 
                 keyExtractor={item => item.url}
@@ -130,8 +143,7 @@ class History extends React.Component {
     
                 }}
             >
-            </FlatList>
-        </View> : null;
+            </FlatList> : null;
     }
 }
 
@@ -171,7 +183,7 @@ class Search extends React.Component {
     }
     renderItem = ({item})=>{
         var e = item;
-        
+        console.log("render item");
         let navigation = this.props?.navigation;
         return (
             <TouchFeedback key={e.url}
@@ -213,7 +225,7 @@ class Search extends React.Component {
             }
             
         }
-        
+        console.log("q",this.state.query,this.state.query?.length, this.state.results != null && this.state.query != "", this.state.results?.length > 0);
 
         return (
             <View style={styles.screenCont}>
@@ -295,7 +307,10 @@ class Search extends React.Component {
                                     windowSize={10}
                                     horizontal={false}
                                     style={{
-
+                                        
+                                    }}
+                                    contentContainerStyle={{
+                                        paddingBottom:65
                                     }}
                                 >
                                 </FlatList>
@@ -306,7 +321,9 @@ class Search extends React.Component {
                                   }}>
                                     <Text style={styles.textNormal}>Nincs találat</Text>
                                 </View>
-                            : <Fragment></Fragment>
+                            : <View>
+                                
+                            </View>
                     }
                 </View>
                 

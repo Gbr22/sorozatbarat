@@ -41,28 +41,27 @@ export function getUser(){
     return user;
 }
 
-var history = [];
+var history = {};
 export function getHistory(){
-    return history;
+    return Object.values(history);
 }
 async function _getHistory(){
-    let str = await AsyncStorage.getItem("search_history");
+    let str = await AsyncStorage.getItem("search_history_v2");
     try {
-        let o = JSON.parse(str) || [];
+        let o = JSON.parse(str) || {};
         return o;
     } catch(err){}
-    return [];
+    return {};
 }
 _getHistory().then(h=>history = h);
 
 export async function addHistory(item) {
-    history = history.filter(e=>e.url != item.url);
-    history.push(item);
-    await AsyncStorage.setItem("search_history",JSON.stringify(history));
+    history[item.url] = item;
+    await AsyncStorage.setItem("search_history_v2",JSON.stringify(history));
 }
 export async function removeHistory(item) {
-    history = history.filter(e=>e.url != item.url);
-    await AsyncStorage.setItem("search_history",JSON.stringify(history));
+    delete history[item.url];
+    await AsyncStorage.setItem("search_history_v2",JSON.stringify(history));
 }
 
 export async function getHomePageData(forceRefresh = false){
@@ -289,9 +288,9 @@ export async function getAutocomplete(search){
         return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
     }
     var normalized = search.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    console.log("escaped",normalized);
+    
     if (lastAutocomplete.query != null && search.indexOf(lastAutocomplete.query) == 0){
-        return lastAutocomplete.results.filter(e=>{
+        let ret = lastAutocomplete.results.filter(e=>{
             let q = normalize(search);
             
             function check(prop){
@@ -302,6 +301,8 @@ export async function getAutocomplete(search){
             }
             return check("label") || check("value");
         });
+        console.log("search",normalized,ret.length);
+        return ret;
     } else {
         var url = URL_BASE+"/series/autocompleteV2?term="+escape(normalized);
         console.log("search query",url);
