@@ -283,6 +283,9 @@ let lastAutocomplete = {
     query:null,
     results:[],
 };
+
+
+
 export async function getAutocomplete(search){
     function normalize(s) {
         return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
@@ -325,6 +328,71 @@ export async function getAutocomplete(search){
     
 
 }
+let blogsCache = new Map();
+export async function getBlogsCache(page = 0, force = false){
+    if (blogsCache.has(page) && !force){
+        return blogsCache.get(page);
+    } else {
+        return getBlogs(page);
+    }
+}
+export async function getBlogs(page = 0){
+    return fetch(URL_BASE_INDEX+"blog/"+(page+1),{
+        headers: {
+            "User-Agent":UA,
+        }
+    }).then(res=>{
+        return res.text();
+    }).then(text=>{
+        let dateRegex = /([0-9]{4}\.[0-9]{2}\.[0-9]{2} [0-9]{2}\:[0-9]{2})/g;
+        let $ = cheerio.load(text);
+        let content = $(".textcontent");
+        let textContent = content.text();
+        let authors = [];
+        content.find(`a[href^="/profile/"]`).each((i,e)=>{
+            authors.push($(e).text().trim());
+        });
+        let titles = [];
+        let links = [];
+        content.find(`h1 a`).each((i,e)=>{
+            titles.push($(e).text().trim());
+            links.push(urlToAbsolute($(e).attr("href")));
+        });
+        let descs = [];
+        content.find(`p`).each((i,e)=>{
+            descs.push($(e).text().trim());
+        });
+
+        let dates = textContent.match(dateRegex);
+        let data = {
+            posts:[],
+        };
+        let assureObj = (i)=>{
+            if (!data.posts[i]){
+                data.posts[i] = {};
+            }
+        };
+        function setProp(arr,prop){
+            arr.forEach((e,i)=>{
+                assureObj(i);    
+                data.posts[i][prop] = e;
+            });
+        }
+        setProp(dates,"date");
+        setProp(authors,"author");
+        setProp(titles,"title");
+        setProp(links,"link");
+        setProp(descs,"desc");
+        
+
+        return data;
+    })
+}
+
+export async function getBlog(url){
+    
+}
+
 export async function getDetails(url){
     var response = await fetch(url, {
         headers: {

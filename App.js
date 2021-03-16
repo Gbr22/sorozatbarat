@@ -20,6 +20,7 @@ import styles, { otherStyles } from './src/styles';
 import SearchScreen from './src/screens/Search';
 import { GlobalContext, initialGlobalState, setUpdate, AppMouted } from './src/GlobalState';
 import LoginScreen from './src/screens/Login';
+import Blog from './src/screens/Blogs';
 import { getUA } from './src/logic/data';
 import { playVideo } from './src/logic/util';
 import Ripple from 'react-native-material-ripple';
@@ -78,6 +79,7 @@ export default class App extends React.Component {
                         >
                           <Tab.Screen options={{ title:"Kezdőlap" }} name="Home" component={HomeScreen} />
                           <Tab.Screen options={{ title:"Keresés" }} name="Search" component={SearchScreen} />
+                          <Tab.Screen options={{ title:"Blog" }} name="Blog" component={Blog} />
                           <Tab.Screen options={{ title:"Fiók" }} name="Other" component={OtherScreen} />
                         </Tab.Navigator>
                       
@@ -159,7 +161,8 @@ function MyTabBar({ state, descriptors, navigation }) {
         var iconName = ({
           "Home":"home",
           "Other":"user",
-          "Search":"search"
+          "Search":"search",
+          "Blog":"layout",
         })[route.name];
 
         var color = isFocused ? otherStyles.colors.theme : otherStyles.theme.text.nav;

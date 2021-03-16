@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import SeriesDetailsScreen from '../screens/SeriesDetails';
 import LinksScreen from '../screens/LinksScreen';
 import LoginScreen from '../screens/Login';
+import BlogScreen from '../screens/BlogScreen';
 import { otherStyles } from '../styles';
 import GallerysScreen from '../screens/Gallery';
 
@@ -76,6 +77,7 @@ export default function getStackItems(Stack){
                 }}
             />
             <Stack.Screen name="Details" component={SeriesDetailsScreen} options={{ title:"Sorozat", headerShown: false, }} />
+            <Stack.Screen name="Blog" component={BlogScreen} options={{ title:"Blog" }} />
             <Stack.Screen name="Links" component={LinksScreen} options={{ title:"Linkek" }} />
             <Stack.Screen name="Login" component={LoginScreen} options={{ title:"Bejelentkezés" }} />
         </Fragment>
