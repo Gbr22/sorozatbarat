@@ -126,6 +126,7 @@ function MyTabBar({ state, descriptors, navigation }) {
         
         elevation: 5,
         // background color must be set
+        overflow: 'hidden',
         backgroundColor: otherStyles.theme.backgroundColor
       }}
     >
@@ -170,7 +171,8 @@ function MyTabBar({ state, descriptors, navigation }) {
 
         return (
           <TouchFeedback
-            rippleColor="rgba(255,255,255,0.5)"
+            /* rippleColor="rgba(255,255,255,0.5)" */
+            background={TouchableNativeFeedback.Ripple("rgba(255, 255, 255,0.2)",true)}
             accessibilityRole="button"
             accessibilityStates={isFocused ? ['selected'] : []}
             accessibilityLabel={options.tabBarAccessibilityLabel}
