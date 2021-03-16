@@ -77,7 +77,7 @@ export default function getStackItems(Stack){
                 }}
             />
             <Stack.Screen name="Details" component={SeriesDetailsScreen} options={{ title:"Sorozat", headerShown: false, }} />
-            <Stack.Screen name="Blog" component={BlogScreen} options={{ title:"Blog" }} />
+            <Stack.Screen name="BlogPost" component={BlogScreen} options={{ title:"Poszt" }} />
             <Stack.Screen name="Links" component={LinksScreen} options={{ title:"Linkek" }} />
             <Stack.Screen name="Login" component={LoginScreen} options={{ title:"Bejelentkezés" }} />
         </Fragment>

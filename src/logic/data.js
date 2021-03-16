@@ -1,6 +1,5 @@
 
 import CookieManager from '@react-native-community/cookies';
-import URL from 'url';
 import UserAgent from 'react-native-user-agent';
 
 var UA = "";
@@ -136,7 +135,7 @@ export async function login(username,password){
     })
 }
 
-function urlToAbsolute(url){
+export function urlToAbsolute(url){
     if (url.indexOf("//") == 0){
         return url.replace("//","https://");
     }
@@ -381,7 +380,7 @@ export async function getBlogs(page = 0){
         setProp(dates,"date");
         setProp(authors,"author");
         setProp(titles,"title");
-        setProp(links,"link");
+        setProp(links,"url");
         setProp(descs,"desc");
         
 
@@ -389,8 +388,36 @@ export async function getBlogs(page = 0){
     })
 }
 
-export async function getBlog(url){
-    
+export function openAnyLink(url,navigation){
+    url = urlToAbsolute(url);
+    if (url.startsWith(URL_BASE+"/blog/view/")){
+        navigation.navigate("BlogPost", {
+            url,
+        });
+    } else if (url.startsWith(URL_BASE+"/video/series/")){
+        navigation.navigate("Details", {
+            series: {url},
+        });
+    } else {
+        Linking.openURL(url);
+    }
+}
+
+export async function getBlogPost(url){
+    return fetch(url,{
+        headers: {
+            "User-Agent":UA,
+        }
+    }).then(res=>{
+        return res.text();
+    }).then(text=>{
+        let $ = cheerio.load(text);
+        let content = $(".textcontent");
+        let html = content.html();
+        return {
+            html
+        }
+    });
 }
 
 export async function getDetails(url){

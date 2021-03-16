@@ -67,18 +67,27 @@ class Blogs extends React.Component {
             <View style={styles.container}>
                 <FlatList
                     data={posts}
-                    keyExtractor={(e)=>e.link}
+                    keyExtractor={(e)=>e.url}
                     renderItem={({item})=>{
                         return (
-                            <TouchableNativeFeedback
-                                onPress={()=>{
-
-                                }}
+                            <View
                                 style={{
                                     marginHorizontal: 20,
                                     marginBottom: 20,
-                                    padding: 16,
                                     backgroundColor: "#313131",
+                                    borderRadius: 17,
+                                    overflow: 'hidden',
+                                }}
+                            >
+                            <TouchableNativeFeedback
+                                background={TouchableNativeFeedback.Ripple("rgba(255, 255, 255,0.2)",true)}
+                                onPress={()=>{
+                                    this.props.navigation.navigate("BlogPost", {
+                                        url: item.url,
+                                    });
+                                }}
+                                style={{
+                                    padding: 16,
                                     borderRadius: 17,
                                 }}
                             >
@@ -106,19 +115,27 @@ class Blogs extends React.Component {
                                             alignItems: "center",
                                         }}
                                     >
+                                        
                                         <TouchableOpacity
                                             onPress={()=>{
 
                                             }}
-                                        >
-                                        <Text
-                                            style={{
-                                                fontStyle: "italic",
-                                                fontSize: 14,
-                                                color: otherStyles.theme.text.small,
+                                            onPressOut={function(e){
+                                                            
                                             }}
-                                        >{item.author} </Text>
+                                            onTouchEnd={(e) => {
+                                                e.stopPropagation();
+                                            }}
+                                        >
+                                            <Text
+                                                style={{
+                                                    fontStyle: "italic",
+                                                    fontSize: 14,
+                                                    color: otherStyles.theme.text.small,
+                                                }}
+                                            >{item.author} </Text>
                                         </TouchableOpacity>
+                                        
                                         <Text
                                             style={{
                                                 fontSize: 14,
@@ -129,6 +146,7 @@ class Blogs extends React.Component {
                                     </View>
                                 </View>
                             </TouchableNativeFeedback>
+                            </View>
                         );
                     }}
                 >
