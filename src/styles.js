@@ -35,7 +35,8 @@ var themes={
     }
   }
 }
-var isDark = Appearance.getColorScheme() == "dark";
+/* var isDark = Appearance.getColorScheme() == "dark"; */
+var isDark = true;
 /* isDark = false; */
 var currentTheme = isDark ? themes.dark : themes.light;
 
