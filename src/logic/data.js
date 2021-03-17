@@ -186,6 +186,7 @@ export function getDownloadURL(dlurl){
         var token = pm.attr("data-token");
         var url = pm.attr("data-url");
         var subtitles = JSON.parse(pm.attr("data-subtitle") || "[]");
+        console.log("puremotion",token,url,subtitles);
         return fetch(url,{
             headers: {
                 "User-Agent":UA,
@@ -207,7 +208,13 @@ export function getDownloadURL(dlurl){
                     html:embedhtml
                 })
             }).then(r=>r.json()).then(json=>{
+                console.log("pm response",json);
                 
+                let url = URL.parse(json.videoUrl);
+                if (!url.hostname){
+                    throw new Error("invalid url: "+json.videoUrl);
+                }
+
                 if (json.status == "error"){
                     throw new Error(json.message);
                 }
