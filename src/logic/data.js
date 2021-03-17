@@ -232,6 +232,8 @@ export async function getLinks(url){
 
     var title = $(".navTitle").text().trim()
     var episode = $("ul li.active").text().trim();
+
+    
     
     items = items.map((e,i)=>{
         var row = chToChArr(e.find("td"),$);
@@ -244,6 +246,22 @@ export async function getLinks(url){
             return null;
         }
 
+        let tags = [];
+        try {
+            tags = chToChArr(row[0].find("img"),$);
+            tags = tags.map((tag)=>{
+                return {
+                    image: urlToAbsolute(tag.attr("src")),
+                    text: tag.attr("title") || tag.attr("original-title"),
+                    classes: tag.attr("class")?.split(" "),
+                }
+            });
+        } catch(err){
+            console.error("tag err",err);
+            tags = [];
+        }
+        
+
         var o;
         
         try {
@@ -254,12 +272,8 @@ export async function getLinks(url){
                     url:uploaderURL ? urlToAbsolute(uploaderURL) : null,
                     username:row[1].find("a").text().trim(),
                 } : null,
-                puremotion: !!row[0].has("img.plugin").length,
-                hd: !!row[0].has("img.hd").length,
-                lang:{
-                    flag:urlToAbsolute(row[0].find("img.flags").attr("src")),
-                    title:row[0].find("img.flags").attr("title"),
-                },
+                tags,
+                puremotion: tags?.find(t=>t.classes?.includes("plugin")) ? true : false,
                 viewcount:row[2].text().trim(),
                 url:urlToAbsolute(links[links.length-1].attr("href")),
             };
@@ -305,11 +319,9 @@ export async function getAutocomplete(search){
             }
             return check("label") || check("value");
         });
-        console.log("search",normalized,ret.length);
         return ret;
     } else {
         var url = URL_BASE+"/series/autocompleteV2?term="+escape(normalized);
-        console.log("search query",url);
         let json = await fetch(url, {
             headers: {
                 "User-Agent":UA,

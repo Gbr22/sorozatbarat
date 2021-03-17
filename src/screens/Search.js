@@ -183,7 +183,6 @@ class Search extends React.Component {
     }
     renderItem = ({item})=>{
         var e = item;
-        console.log("render item");
         let navigation = this.props?.navigation;
         return (
             <TouchFeedback key={e.url}
@@ -225,7 +224,6 @@ class Search extends React.Component {
             }
             
         }
-        console.log("q",this.state.query,this.state.query?.length, this.state.results != null && this.state.query != "", this.state.results?.length > 0);
 
         return (
             <View style={styles.screenCont}>

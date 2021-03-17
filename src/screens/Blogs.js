@@ -35,7 +35,6 @@ class Blogs extends React.Component {
                 data:d,
                 refreshing:false,
             });
-            console.log(d);
         }).catch(err=>{
             this.setState({
                 data:null,
@@ -50,7 +49,6 @@ class Blogs extends React.Component {
     }
 
     componentDidMount() {
-        console.log("pixel ratio",PixelRatio.get());
         this.turnPage(0);
     }
 

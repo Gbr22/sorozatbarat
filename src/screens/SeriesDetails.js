@@ -97,7 +97,6 @@ export default class SeriesDetailsScreen extends React.Component {
                     url
                 };
                 addHistory(h);
-                console.log("add to history",h.url);
             }
         }).catch((err)=>{
             this.setState({

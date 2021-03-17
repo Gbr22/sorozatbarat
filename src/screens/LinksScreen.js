@@ -12,6 +12,10 @@ import { Feather } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons'; 
 import { playVideo } from '../logic/util';
 import LoadingContainer from '../components/LoadingContainer';
+import ExtSvg from '../icons/linkTags/ext.svg';
+import PhoneSvg from '../icons/linkTags/phone.svg';
+import HdSvg from '../icons/linkTags/hd.svg';
+
 
 export default class LinksScreen extends React.Component {
     state = {
@@ -41,7 +45,6 @@ export default class LinksScreen extends React.Component {
                 <LoadingContainer></LoadingContainer>
             )
         }
-
         var {url, items} = data;
         let cleanTitle = data.title.replace(" - ", " ").replace(" :: "," - ");
         return (
@@ -65,13 +68,13 @@ export default class LinksScreen extends React.Component {
                     </View>
                     {
                         items.map(e=>{
-                            
                             function openLink(){
                                 getPlayEndURL(
                                     referer,
                                     e.url
                                 ).then(url=>{
                                     ToastAndroid.show("Indítás...",ToastAndroid.SHORT);
+                                    console.log("starting link",e.tags);
                                     if (e.puremotion){
                                         getDownloadURL(url).then(json=>{
                                             /* console.log("download",json); */
@@ -120,82 +123,137 @@ export default class LinksScreen extends React.Component {
                                             paddingHorizontal: 20
                                         }}
                                     >
-                                        <View
-                                            style={{
-                                                flexDirection: "column",
-                                                justifyContent: "center",
-                                                alignItems: "center",
-                                                marginRight: 8,
-                                            }}
-                                        >
-                                            <TouchableWithoutFeedback
-                                                onPress={()=>{
-                                                    Platform.select({
-                                                        android:(t)=>{
-                                                            ToastAndroid.show(t,ToastAndroid.SHORT);
-                                                        },
-                                                        default:alert
-                                                    })(e.lang.title);
-                                                }}
-                                            >
-                                                <Image
-                                                    style={{
-                                                        width: 25,
-                                                        height: 20,
-                                                        resizeMode: "contain",
-                                                    }}
-                                                    source={{uri:e.lang.flag}}
-                                                />
-                                            </TouchableWithoutFeedback>
-                                        </View>
                                         
                                         <View
                                             style={{
                                                 flex:1,
                                             }}
                                         >
-                                            <TouchableWithoutFeedback
+                                                <View
+                                                    style={{
+                                                        flexDirection:'row',
+                                                    }}
+                                                >
+                                                    <View
+                                                        style={{
+                                                            flexGrow: 1,
+                                                        }}
+                                                    >
+                                                        <TouchableWithoutFeedback
+                                                        >
+                                                            <Text
+                                                                style={{color:styles.textNormal.color}}
+                                                            >{e.title}</Text>
+                                                        </TouchableWithoutFeedback>
+                                                    </View>
+                                                    
+                                                    <TouchableWithoutFeedback
+                                                    >
+                                                        <Text
+                                                            style={{color:styles.textNormal.color}}
+                                                        >
+                                                            {e.viewcount}
+                                                        </Text>
+                                                    </TouchableWithoutFeedback>
+                                                </View>
                                                 
-                                            >
-                                                <Text
-                                                    style={{color:styles.textNormal.color}}
-                                                >{e.title}</Text>
-                                            </TouchableWithoutFeedback>
-                                            { e.uploader ? (
+                                            
                                                 <View
                                                     style={{
                                                         flexDirection:"row",
+                                                        marginTop: 2,
+                                                        width: "100%",
                                                     }}
                                                 >
-                                                    <Text
-                                                        style={{color:styles.textSmall.color}}
-                                                    >Feltöltő: </Text>
-                                                    
                                                     <View
-                                                        onStartShouldSetResponder={event => true}
+                                                        style={{
+                                                            flexDirection: 'row',
+                                                            flexGrow: 1,
+                                                        }}
                                                     >
-                                                        <TouchableOpacity
-                                                            onPressOut={function(e){
-                                                                
-                                                            }}
-                                                        >
-                                                            <View>
-                                                                <Text style={styles.link}>{e.uploader.username}</Text>
+                                                        { e.uploader ? <Fragment>
+                                                            <Text
+                                                                style={{color:styles.textSmall.color}}
+                                                            >Feltöltő: </Text>
+                                                            
+                                                            <View
+                                                                onStartShouldSetResponder={event => true}
+                                                            >
+                                                                <TouchableOpacity
+                                                                    onPressOut={function(e){
+                                                                        
+                                                                    }}
+                                                                >
+                                                                    <View>
+                                                                        <Text style={styles.link}>{e.uploader.username}</Text>
+                                                                    </View>
+                                                                </TouchableOpacity>
                                                             </View>
-                                                        </TouchableOpacity>
+                                                        </Fragment> : <Text style={{color:styles.textSmall.color}}>Feltöltő ismeretlen</Text>}
                                                     </View>
                                                     
+                                                    <View
+                                                        style={{
+                                                            flexDirection: "row",
+                                                        }}
+                                                    >
+                                                        {
+                                                            e.tags?.reverse()?.map(tag=>{
+                                                                function getImage(){
+                                                                    function svg(I){
+                                                                        return <I width={18} height={18} />;
+                                                                    }
+                                                                    if (tag.classes?.includes("plugin")){
+                                                                        return svg(ExtSvg);
+                                                                    }
+                                                                    else if (tag.classes?.includes("hd")){
+                                                                        return svg(HdSvg);
+                                                                    }
+                                                                    else if (tag.classes?.includes("mobile")){
+                                                                        return svg(PhoneSvg);
+                                                                    }
+                                                                    else {
+                                                                        return <Image
+                                                                            style={{
+                                                                                width: 20,
+                                                                                height: 18,
+                                                                                resizeMode: "contain",
+                                                                            }}
+                                                                            source={{uri:tag.image}}
+                                                                        />;
+                                                                    }
+                                                                }
+
+                                                                return (<View
+                                                                    style={{
+                                                                        flexDirection: "column",
+                                                                        justifyContent: "center",
+                                                                        alignItems: "center",
+                                                                        marginLeft: 5,
+                                                                    }}
+                                                                    key={tag.image}
+                                                                    onStartShouldSetResponder={event => true}
+                                                                >
+                                                                    <TouchableWithoutFeedback
+                                                                        onPress={()=>{
+                                                                            Platform.select({
+                                                                                android:(t)=>{
+                                                                                    ToastAndroid.show(t,ToastAndroid.SHORT);
+                                                                                },
+                                                                                default:alert
+                                                                            })(tag.text);
+                                                                        }}
+                                                                    >
+                                                                        {getImage()}
+                                                                    </TouchableWithoutFeedback>
+                                                                </View>);
+                                                            })
+                                                        }
+                                                    </View>
                                                 </View>
-                                            ) : null }
+                                        
+                                            
                                         </View>
-                                        <TouchableWithoutFeedback
-                                        >
-                                            <Text
-                                                style={{color:styles.textNormal.color}}
-                                            >
-                                                {e.viewcount}
-                                            </Text>
-                                        </TouchableWithoutFeedback>
                                     </View>
                                 </TouchFeedback>
                             )
