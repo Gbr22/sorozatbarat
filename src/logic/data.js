@@ -1,6 +1,7 @@
 
 import CookieManager from '@react-native-community/cookies';
 import UserAgent from 'react-native-user-agent';
+import URL from 'url';
 
 var UA = "";
 export function getUserAgent(){
@@ -189,15 +190,16 @@ export function getDownloadURL(dlurl){
         })
     })
 }
-export function getPlayEndURL(referer,start){
+export async function getPlayEndURL(referer,start){
     try {
         var FILMORIAS_BASE = "https://www.filmorias.com/ugras-a-videohoz/";
         var u = URL.parse(start);
         var id = u.pathname.replace("/video/redirect/","");
         var url = FILMORIAS_BASE+id;
-        return new Promise(r=>r(url));
+        return url;
     } catch(err){
         console.warn("end url err",err);
+        throw err;
     }
     
     /* return fetch(start, {
