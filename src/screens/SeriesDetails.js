@@ -18,9 +18,11 @@ import ImdbSvg from "../icons/imdb.svg";
 import PorthuSvg from "../icons/porthu.svg";
 import { Modal } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import { Episode } from './SeriesDetails/Episode';
+import { getImdbInfo } from '../logic/data';
 
 
-class Desc extends React.Component {
+class Desc extends React.PureComponent {
     state = {
         isDescOpen:false,
     }
@@ -84,12 +86,26 @@ export default class SeriesDetailsScreen extends React.Component {
         errored:false,
         errorMessage:null,
         isFromSearch:false,
+        imdb:null,
     };
     openURL(url){
         getDetails(url).then((d)=>{
-            this.setState({
-                item:d
-            })
+            if (d.imdb){
+                getImdbInfo(d.imdb).then(data=>{
+                    this.setState({
+                        imdb:data,
+                        item:d,
+                    })
+                }).catch(err=>{
+                    this.setState({
+                        item:d
+                    })
+                })
+            } else {
+                this.setState({
+                    item:d
+                })
+            }
             if (this.state.isFromSearch){
                 let h = {
                     time: Date.now(),
@@ -159,7 +175,10 @@ export default class SeriesDetailsScreen extends React.Component {
             
             resizeMode: 'contain',
         };
-        var score = null;
+
+        let imdbData = this.state.imdb;
+
+        var score = imdbData?.rating;
 
         function DetailIcon({url,img,width,height}){
             var loadInBrowser = () => {
@@ -371,7 +390,7 @@ export default class SeriesDetailsScreen extends React.Component {
                                         marginHorizontal: 6,
                                     }}
                                 >
-                                    <Text style={{fontSize: 18, color: "#D3D3D3", fontWeight: "bold"}}>${score}</Text>
+                                    <Text style={{fontSize: 18, color: "#D3D3D3", fontWeight: "bold"}}>{score}</Text>
                                     <AntDesign style={{marginLeft:2, fontSize: 16, color: "#D3D3D3"}} name="star"></AntDesign>
                                 </View> : null}
                             </View> : null }
@@ -481,103 +500,7 @@ export default class SeriesDetailsScreen extends React.Component {
                     }}
                     renderItem={({item})=>{
                         var e = item;
-                        class Action extends React.Component {
-
-                            state={
-                                active:false
-                            }
-                            componentDidMount(){
-                                this.setState({
-                                    active:this.props.active
-                                })
-                            }
-
-                            render(){
-                                var iconSize = 20;
-                                var defColor = "#808080";
-
-                                var {color, last=false, icons, url} = this.props;
-                                var active = this.state.active;
-                                
-                                return (
-                                    <TouchableWithoutFeedback
-                                        onPress={
-                                            async ()=>{
-                                                var result = await fetch(url, {
-                                                    headers: {
-                                                        "User-Agent":getUserAgent(),
-                                                    }
-                                                }).then(r=>{
-                                                    return r.text();
-                                                })
-                                                if (result == "removed"){
-                                                    this.setState({
-                                                        active:false,
-                                                    })
-                                                } else if (result == "inserted"){
-                                                    this.setState({
-                                                        active:true,
-                                                    })
-                                                }
-                                                
-                                            }
-                                        }
-                                    >
-                                        <AntDesign
-                                            name={active==true ? icons[0] : icons[1]}
-                                            size={iconSize} color={active ? color : defColor} style={{marginRight: last ? 0 : 10}}    
-                                        />
-                                    </TouchableWithoutFeedback>
-                                )
-                            }
-                        }
-                        
-
-                        return (
-                            <TouchFeedback key={e.title}
-                                
-                            >
-                                <View
-                                    style={{
-                                        
-                                        paddingHorizontal: 20,
-                                        
-                                        borderRadius: 12,
-                                        /* borderWidth: 1,
-                                        borderColor: "#e6e6e6", */
-                                        flexDirection: "row",
-                                        alignItems: "center"
-                                    }}
-                                >
-                                    <View style={{
-                                        flex:1,
-                                    }}>
-                                        <TouchableWithoutFeedback
-                                            style={{
-                                                
-                                                paddingVertical: 8,
-                                            }}
-                                            onPress={()=>{
-                                                this.props.navigation.navigate("Links", {
-                                                    url: e.url,
-                                                });
-                                            }}
-                                        >
-                                            <Text
-                                                style={{
-                                                    color: styles.textNormal.color
-                                                }}
-                                            >
-                                                {e.title}
-                                            </Text>
-                                        </TouchableWithoutFeedback>
-                                    </View>
-                                    <Action url={e.watched.url} active={e.watched.value} color="#00b300" icons={["eye","eyeo"]} />
-                                    <Action url={e.fav.url} active={e.fav.value} color="#e6b800" icons={["star","staro"]} last={true} />
-                                    
-                                </View>
-                            </TouchFeedback>
-                        )
+                        return <Episode episode={e} navigation={this.props.navigation} imdb={imdbData} />;
                     }}
                 >
 

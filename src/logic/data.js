@@ -22,6 +22,35 @@ export function getUA(params) {
     })
 }
 
+let apiKey = null;
+
+fetch("https://sbapi.netlify.app/token").then(r=>r.text()).then(text=>{
+    apiKey = text.trim();
+}).catch(err=>{
+    console.error("failed to get api key",err);
+})
+
+function encodeSearchParams(obj){
+    return Object.keys(obj)
+    .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(obj[k]))
+    .join('&');
+}
+
+export async function getImdbInfo(url){
+    let id = url.match(/tt\d{7}/)?.[0];
+    console.log("id",id);
+    return fetch("https://www.myapifilms.com/imdb/idIMDB?"+encodeSearchParams({
+        idIMDB: id,
+        token: apiKey,
+        format: "json",
+        language: "hu",
+        lang: "hu",
+        seasonYear: 0,
+        seasons: 1,
+    })).then(r=>r.json()).then(json=>json?.data?.movies[0]);
+}
+
+
 var HOST = "www.sorozatbarat.club";
 var URL_BASE = "https://www.sorozatbarat.club";
 var URL_BASE_INDEX = "https://www.sorozatbarat.club/";
